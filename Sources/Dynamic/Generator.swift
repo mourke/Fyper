@@ -18,10 +18,12 @@ extension CoffeeMaker {
 
 struct Generator {
     
-    static let shared = Generator()
+    let logger: Logger
+    let options: Options
     
-    func generate(_ output: String) throws {
-        let filePath = output + "/FyperGenerated.swift"
+    
+    func generate() throws {
+        let filePath = options.outputDirectoryPath + "/FyperGenerated.swift"
         try code.write(toFile: filePath, atomically: true, encoding: .ascii)
     }
 }

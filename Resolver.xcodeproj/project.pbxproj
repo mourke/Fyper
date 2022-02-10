@@ -43,6 +43,8 @@
 		BD45924F27AEBE1D00FAE4B1 /* Initializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45924E27AEBE1D00FAE4B1 /* Initializer.swift */; };
 		BD45925127B1233D00FAE4B1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45925027B1233D00FAE4B1 /* Constants.swift */; };
 		BD45925327B125CB00FAE4B1 /* Injection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45925227B125CB00FAE4B1 /* Injection.swift */; };
+		BD45925527B529F900FAE4B1 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45925427B529F900FAE4B1 /* Options.swift */; };
+		BD45925727B52A7200FAE4B1 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45925627B52A7200FAE4B1 /* Logger.swift */; };
 		OBJ_40 /* Resolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Resolver.swift */; };
 		OBJ_47 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_58 /* ResolverBasicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* ResolverBasicTests.swift */; };
@@ -137,6 +139,8 @@
 		BD45924E27AEBE1D00FAE4B1 /* Initializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Initializer.swift; sourceTree = "<group>"; };
 		BD45925027B1233D00FAE4B1 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		BD45925227B125CB00FAE4B1 /* Injection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Injection.swift; sourceTree = "<group>"; };
+		BD45925427B529F900FAE4B1 /* Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
+		BD45925627B52A7200FAE4B1 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		OBJ_12 /* ResolverBasicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolverBasicTests.swift; sourceTree = "<group>"; };
 		OBJ_13 /* ResolverClassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolverClassTests.swift; sourceTree = "<group>"; };
 		OBJ_14 /* ResolverContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolverContainerTests.swift; sourceTree = "<group>"; };
@@ -223,6 +227,8 @@
 				BD45924E27AEBE1D00FAE4B1 /* Initializer.swift */,
 				BD45925027B1233D00FAE4B1 /* Constants.swift */,
 				BD45925227B125CB00FAE4B1 /* Injection.swift */,
+				BD45925427B529F900FAE4B1 /* Options.swift */,
+				BD45925627B52A7200FAE4B1 /* Logger.swift */,
 			);
 			name = Dynamic;
 			path = Sources/Dynamic;
@@ -542,6 +548,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BD45923827AA9C5F00FAE4B1 /* Analyser.swift in Sources */,
+				BD45925727B52A7200FAE4B1 /* Logger.swift in Sources */,
 				BD45924F27AEBE1D00FAE4B1 /* Initializer.swift in Sources */,
 				BD45922A27AA8EA400FAE4B1 /* Fyper.swift in Sources */,
 				BD45924D27AEB9BB00FAE4B1 /* SyntaxStructure.swift in Sources */,
@@ -549,6 +556,7 @@
 				BD45923027AA966000FAE4B1 /* FileManager+Directory.swift in Sources */,
 				BD45925327B125CB00FAE4B1 /* Injection.swift in Sources */,
 				BD45923A27AA9D3F00FAE4B1 /* Generator.swift in Sources */,
+				BD45925527B529F900FAE4B1 /* Options.swift in Sources */,
 				BD45925127B1233D00FAE4B1 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

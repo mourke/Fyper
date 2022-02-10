@@ -26,20 +26,27 @@ struct Fyper: ParsableCommand {
         
         @Option(name: .shortAndLong, help: "The output directory of the generated files. Fyper will create the directory if it does not exist already provided that the root directory exists already.")
         var outputDirectory: String
+        
+        @Flag(name: .shortAndLong, help: "Show more debugging information.")
+        var verbose: Int
 
         mutating func run() throws {
+            let options = Options(sourceDirectoryPath: sourceDirectory,
+                                  outputDirectoryPath: outputDirectory,
+                                  verboseLogging: verbose > 0)
+            let logger = Logger(verboseLogging: options.verboseLogging)
+            
             if !FileManager.default.directoryExists(atPath: outputDirectory) {
                 try FileManager.default.createDirectory(atPath: outputDirectory, withIntermediateDirectories: false)
             }
+            
+            
 //            
 //            print("Output directory is: \(outputDirectory)")
 //            print("Source directory is: \(sourceDirectory)")
             
-            let injections = try Analyser.shared.analyse(sourceDirectory)
-            injections.forEach {
-                print($0)
-            }
-            try Generator.shared.generate(outputDirectory)
+            let injections = try Analyser(logger: logger, options: options).analyse()
+            try Generator(logger: logger, options: options).generate()
         }
     }
 }
