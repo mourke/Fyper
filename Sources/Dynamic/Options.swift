@@ -9,7 +9,7 @@ import Foundation
 
 struct Options {
     
-    let sourceDirectoryPath: String
-    let outputDirectoryPath: String
+    let sourceDirectory: URL
+    let outputDirectory: URL
     let verboseLogging: Bool
 }

@@ -45,6 +45,7 @@
 		BD45925327B125CB00FAE4B1 /* Injection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45925227B125CB00FAE4B1 /* Injection.swift */; };
 		BD45925527B529F900FAE4B1 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45925427B529F900FAE4B1 /* Options.swift */; };
 		BD45925727B52A7200FAE4B1 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45925627B52A7200FAE4B1 /* Logger.swift */; };
+		BD45925A27C3DD4100FAE4B1 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45925927C3DD4100FAE4B1 /* Error.swift */; };
 		OBJ_40 /* Resolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Resolver.swift */; };
 		OBJ_47 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_58 /* ResolverBasicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* ResolverBasicTests.swift */; };
@@ -141,6 +142,7 @@
 		BD45925227B125CB00FAE4B1 /* Injection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Injection.swift; sourceTree = "<group>"; };
 		BD45925427B529F900FAE4B1 /* Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 		BD45925627B52A7200FAE4B1 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		BD45925927C3DD4100FAE4B1 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		OBJ_12 /* ResolverBasicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolverBasicTests.swift; sourceTree = "<group>"; };
 		OBJ_13 /* ResolverClassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolverClassTests.swift; sourceTree = "<group>"; };
 		OBJ_14 /* ResolverContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolverContainerTests.swift; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 				BD45925227B125CB00FAE4B1 /* Injection.swift */,
 				BD45925427B529F900FAE4B1 /* Options.swift */,
 				BD45925627B52A7200FAE4B1 /* Logger.swift */,
+				BD45925927C3DD4100FAE4B1 /* Error.swift */,
 			);
 			name = Dynamic;
 			path = Sources/Dynamic;
@@ -374,6 +377,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BD065F7727A195960026A09A /* Build configuration list for PBXNativeTarget "DynamicProject" */;
 			buildPhases = (
+				BD45925827C3CD6800FAE4B1 /* Automatic Dependency Injection */,
 				BD065F6F27A195960026A09A /* Sources */,
 				BD065F7027A195960026A09A /* Frameworks */,
 				BD065F7127A195960026A09A /* CopyFiles */,
@@ -522,6 +526,27 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		BD45925827C3CD6800FAE4B1 /* Automatic Dependency Injection */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Automatic Dependency Injection";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n/Users/mourke/Library/Developer/Xcode/DerivedData/Resolver-gjkfclslhnmiungemqosjhxicjoy/Build/Products/Debug/Dynamic generate -o Tests/DynamicProject/generated -s Tests/DynamicProject\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		BD065F5427A185AA0026A09A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -551,6 +576,7 @@
 				BD45925727B52A7200FAE4B1 /* Logger.swift in Sources */,
 				BD45924F27AEBE1D00FAE4B1 /* Initializer.swift in Sources */,
 				BD45922A27AA8EA400FAE4B1 /* Fyper.swift in Sources */,
+				BD45925A27C3DD4100FAE4B1 /* Error.swift in Sources */,
 				BD45924D27AEB9BB00FAE4B1 /* SyntaxStructure.swift in Sources */,
 				BD45922E27AA90AE00FAE4B1 /* Collection+SafeIndex.swift in Sources */,
 				BD45923027AA966000FAE4B1 /* FileManager+Directory.swift in Sources */,

@@ -10,7 +10,6 @@ import Foundation
 struct Logger {
     
     enum Kind {
-        case error
         case info
         case debug
     }
@@ -23,8 +22,6 @@ struct Logger {
     
     func log(_ message: String, kind: Kind) {
         switch kind {
-        case .error:
-            FileHandle.standardError.write(message.data(using: .ascii)!)
         case .debug:
             guard verboseLoggingEnabled else { break }
             fallthrough

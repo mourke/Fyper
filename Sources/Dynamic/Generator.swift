@@ -23,7 +23,7 @@ struct Generator {
     
     
     func generate() throws {
-        let filePath = options.outputDirectoryPath + "/FyperGenerated.swift"
+        let filePath = options.outputDirectory.path + "/FyperGenerated.swift"
         try code.write(toFile: filePath, atomically: true, encoding: .ascii)
     }
 }

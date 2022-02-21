@@ -31,21 +31,28 @@ struct Fyper: ParsableCommand {
         var verbose: Int
 
         mutating func run() throws {
-            let options = Options(sourceDirectoryPath: sourceDirectory,
-                                  outputDirectoryPath: outputDirectory,
+            let options = Options(sourceDirectory: URL(fileURLWithPath: sourceDirectory),
+                                  outputDirectory: URL(fileURLWithPath: outputDirectory),
                                   verboseLogging: verbose > 0)
             let logger = Logger(verboseLogging: options.verboseLogging)
+            
+            guard options.sourceDirectory.hasDirectoryPath && options.outputDirectory.hasDirectoryPath else {
+                throw ValidationError("Input and output directories must be such.")
+            }
+            
             
             if !FileManager.default.directoryExists(atPath: outputDirectory) {
                 try FileManager.default.createDirectory(atPath: outputDirectory, withIntermediateDirectories: false)
             }
             
+            do {
+                let _ = try Analyser(logger: logger, options: options).analyse()
+            } catch let e {
+                print(e)
+                throw ExitCode.failure
+            }
             
-//            
-//            print("Output directory is: \(outputDirectory)")
-//            print("Source directory is: \(sourceDirectory)")
             
-            let injections = try Analyser(logger: logger, options: options).analyse()
             try Generator(logger: logger, options: options).generate()
         }
     }
