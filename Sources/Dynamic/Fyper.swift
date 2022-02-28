@@ -46,7 +46,7 @@ struct Fyper: ParsableCommand {
             }
             
             do {
-                let _ = try Analyser(logger: logger, options: options).analyse()
+                try Analyser(logger: logger, options: options).analyse()
             } catch let e {
                 print(e)
                 throw ExitCode.failure

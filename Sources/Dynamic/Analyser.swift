@@ -10,18 +10,18 @@ import SourceKittenFramework
 
 struct Analyser {
     
+    typealias FileStructure = (File, SyntaxStructure)
+    
     let logger: Logger
     let options: Options
     
-    func analyse() throws -> Set<Injection> {
+    func analyse() throws {
         let fileNames = try FileManager.default.contentsOfDirectory(atPath: options.sourceDirectory.path)
         let swiftFileNames = fileNames.filter { $0.components(separatedBy: ".").last == Constants.FileExtension }
         
         logger.log("Analysing \(swiftFileNames.count) file(s). \(swiftFileNames.joined(separator: ", "))", kind: .debug)
         
-        var injections: Set<Injection> = []
-        
-        for fileName in swiftFileNames {
+        let fileStructures: [FileStructure] = try swiftFileNames.map { fileName in
             let filePath = "\(options.sourceDirectory.relativePath)/\(fileName)"
             
             logger.log("Parsing \(filePath)...", kind: .debug)
@@ -33,13 +33,35 @@ struct Analyser {
             logger.log("Reading structure of \(filePath)...", kind: .debug)
             let structure = try Structure(file: file)
             
+//            print(structure.description)
+
             guard let jsonData = structure.description.data(using: .utf8) else {
                 let message = "Could not parse JSON structure using utf-8 encoding."
                 throw Fyper.Error.internalError(message)
             }
-            
+
             logger.log("Mapping JSON to Swift Object...", kind: .debug)
-            let syntaxStructure = try JSONDecoder().decode(SyntaxStructure.self, from: jsonData)
+            return (file, try JSONDecoder().decode(SyntaxStructure.self, from: jsonData))
+        }
+        
+        let injections = try findInjections(in: fileStructures)
+        
+        for (initializer, _) in injections {
+            var root = Node(parent: nil, typename: initializer.typename)
+            
+            try buildCallingGraph(node: &root, fileStructures: fileStructures)
+            
+            print(root)
+        }
+    }
+    
+    private func findInjections(in fileStructures: [FileStructure]) throws -> [Initializer: Set<Injection>] {
+        var injections: [Initializer: Set<Injection>] = [:]
+        
+        for (file, syntaxStructure) in fileStructures {
+            guard let filePath = file.path else {
+                throw Fyper.Error.internalError("File was not created properly. No path found.")
+            }
             
             logger.log("Looking for initializers in \(filePath)...", kind: .debug)
             let initializers = findInitializers(syntaxStructure: syntaxStructure)
@@ -83,7 +105,7 @@ struct Analyser {
                 
                 logger.log("\(initializer) will be \(injectionKind.rawValue).", kind: .debug)
                 
-                injections.formUnion(initializer.arguments.map {
+                injections[initializer, default: []].formUnion(initializer.arguments.map {
                     return Injection(typenameToBeInjected: $0,
                                      typenameToBeInjectedInto: initializer.typename,
                                      kind: injectionKind)
@@ -91,9 +113,48 @@ struct Analyser {
             }
         }
         
-        logger.log("Found \(injections.count) injection(s). \(injections.map { $0.description }.joined(separator: ", "))", kind: .debug)
+        logger.log("Found \(injections.count) injection(s). \(injections.values.map { $0.description }.joined(separator: ", "))", kind: .debug)
         
         return injections
+    }
+    
+    private func buildCallingGraph(node parent: inout Node, fileStructures: [FileStructure]) throws {
+        for (_, syntaxStructure) in fileStructures {
+            guard let initializingClass = fileInitializesType(parent.typename, syntaxStructure: syntaxStructure) else {
+                continue
+            }
+            
+            var node = Node(parent: parent, typename: initializingClass)
+            parent.addChild(node)
+            
+            try buildCallingGraph(node: &node, fileStructures: fileStructures)
+        }
+    }
+    
+    private func fileInitializesType(_ type: String, syntaxStructure: SyntaxStructure) -> String? {
+        guard let rawValue = syntaxStructure.kind,
+              let kind = SwiftDeclarationKind(rawValue: rawValue),
+              kind == .class || kind == .struct,
+              let typename = syntaxStructure.name
+        else {
+            logger.log("Syntax structure is not a class or struct. Ignoring...", kind: .debug)
+            return syntaxStructure.substructure?.compactMap { fileInitializesType(type, syntaxStructure: $0) }.first
+        }
+        
+        return declarationCallsInitializer(type, syntaxStructure: syntaxStructure) ? typename : nil
+    }
+    
+    private func declarationCallsInitializer(_ type: String, syntaxStructure: SyntaxStructure) -> Bool {
+        guard let rawValue = syntaxStructure.kind,
+              let kind = SwiftExpressionKind(rawValue: rawValue),
+              kind == .call,
+              let call = syntaxStructure.name,
+              call == "\(type).init" || call == type // TODO: search for shortcut initialisers too
+        else {
+            return syntaxStructure.substructure?.contains { declarationCallsInitializer(type, syntaxStructure: $0) } ?? false
+        }
+        
+        return true
     }
     
     private func findInitializers(syntaxStructure: SyntaxStructure) -> [Initializer] {

@@ -7,7 +7,17 @@
 
 import Foundation
 
-let coffeeMaker = CoffeeMaker()
+@main
+class Main {
+    
+    
+    init() {
+        let coffeeMaker = CoffeeMaker.init()
+        let coffeeMaker2 = CoffeeMaker.init(pump: Pump(), heater: Heater())
 
-coffeeMaker.makeCoffee()
+        coffeeMaker.makeCoffee()
+    }
+}
+
+
 
