@@ -20,6 +20,7 @@ struct Generator {
     
     let logger: Logger
     let options: Options
+    let graphs: [InitialNode]
     
     
     func generate() throws {

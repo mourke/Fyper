@@ -46,14 +46,13 @@ struct Fyper: ParsableCommand {
             }
             
             do {
-                try Analyser(logger: logger, options: options).analyse()
+                let graphs = try Analyser(logger: logger, options: options).analyse()
+                
+                try Generator(logger: logger, options: options, graphs: graphs).generate()
             } catch let e {
                 print(e)
                 throw ExitCode.failure
             }
-            
-            
-            try Generator(logger: logger, options: options).generate()
         }
     }
 }

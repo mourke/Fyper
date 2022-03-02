@@ -48,6 +48,8 @@
 		BD45925A27C3DD4100FAE4B1 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45925927C3DD4100FAE4B1 /* Error.swift */; };
 		BD6AD93227CD33C000CD03DB /* SourceKitten+SwiftExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6AD93127CD33C000CD03DB /* SourceKitten+SwiftExpression.swift */; };
 		BD6AD93427CD364200CD03DB /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6AD93327CD364200CD03DB /* Node.swift */; };
+		BD6AD93627CE1EC900CD03DB /* CallingNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6AD93527CE1EC900CD03DB /* CallingNode.swift */; };
+		BD6AD93827CE1ED600CD03DB /* InitialNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6AD93727CE1ED600CD03DB /* InitialNode.swift */; };
 		OBJ_40 /* Resolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Resolver.swift */; };
 		OBJ_47 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_58 /* ResolverBasicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* ResolverBasicTests.swift */; };
@@ -147,6 +149,8 @@
 		BD45925927C3DD4100FAE4B1 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		BD6AD93127CD33C000CD03DB /* SourceKitten+SwiftExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SourceKitten+SwiftExpression.swift"; sourceTree = "<group>"; };
 		BD6AD93327CD364200CD03DB /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		BD6AD93527CE1EC900CD03DB /* CallingNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallingNode.swift; sourceTree = "<group>"; };
+		BD6AD93727CE1ED600CD03DB /* InitialNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialNode.swift; sourceTree = "<group>"; };
 		OBJ_12 /* ResolverBasicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolverBasicTests.swift; sourceTree = "<group>"; };
 		OBJ_13 /* ResolverClassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolverClassTests.swift; sourceTree = "<group>"; };
 		OBJ_14 /* ResolverContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolverContainerTests.swift; sourceTree = "<group>"; };
@@ -237,6 +241,8 @@
 				BD45925627B52A7200FAE4B1 /* Logger.swift */,
 				BD45925927C3DD4100FAE4B1 /* Error.swift */,
 				BD6AD93327CD364200CD03DB /* Node.swift */,
+				BD6AD93527CE1EC900CD03DB /* CallingNode.swift */,
+				BD6AD93727CE1ED600CD03DB /* InitialNode.swift */,
 			);
 			name = Dynamic;
 			path = Sources/Dynamic;
@@ -585,10 +591,12 @@
 				BD45925A27C3DD4100FAE4B1 /* Error.swift in Sources */,
 				BD45924D27AEB9BB00FAE4B1 /* SyntaxStructure.swift in Sources */,
 				BD45922E27AA90AE00FAE4B1 /* Collection+SafeIndex.swift in Sources */,
+				BD6AD93627CE1EC900CD03DB /* CallingNode.swift in Sources */,
 				BD45923027AA966000FAE4B1 /* FileManager+Directory.swift in Sources */,
 				BD45925327B125CB00FAE4B1 /* Injection.swift in Sources */,
 				BD45923A27AA9D3F00FAE4B1 /* Generator.swift in Sources */,
 				BD6AD93227CD33C000CD03DB /* SourceKitten+SwiftExpression.swift in Sources */,
+				BD6AD93827CE1ED600CD03DB /* InitialNode.swift in Sources */,
 				BD45925527B529F900FAE4B1 /* Options.swift in Sources */,
 				BD45925127B1233D00FAE4B1 /* Constants.swift in Sources */,
 				BD6AD93427CD364200CD03DB /* Node.swift in Sources */,
