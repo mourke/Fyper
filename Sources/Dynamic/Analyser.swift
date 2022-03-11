@@ -10,10 +10,8 @@ import SourceKittenFramework
 
 struct Analyser {
     
-    typealias FileStructure = (File, SyntaxStructure)
-    
     let logger: Logger
-    let options: Options
+    let fileStructures: [FileStructure]
     
     ///
     /// Begins the analysis of the source code specified in the Options.
@@ -24,32 +22,6 @@ struct Analyser {
     /// - Returns:  A calling graph for every class that needs to be injected, along with what needs to be injected.
     ///
     func analyse() throws -> [InitialNode] {
-        let fileNames = try FileManager.default.contentsOfDirectory(atPath: options.sourceDirectory.path)
-        let swiftFileNames = fileNames.filter { $0.components(separatedBy: ".").last == Constants.FileExtension }
-        
-        logger.log("Analysing \(swiftFileNames.count) file(s). \(swiftFileNames.joined(separator: ", "))", kind: .debug)
-        
-        let fileStructures: [FileStructure] = try swiftFileNames.map { fileName in
-            let filePath = "\(options.sourceDirectory.relativePath)/\(fileName)"
-            
-            logger.log("Parsing \(filePath)...", kind: .debug)
-            guard let file = File(path: filePath) else {
-                let message = Fyper.Error.Message(message: "This file could not be parsed. Is it corrupted or using any non-utf-8 characters?", file: filePath)
-                throw Fyper.Error.parseError(message)
-            }
-            
-            logger.log("Reading structure of \(filePath)...", kind: .debug)
-            let structure = try Structure(file: file)
-
-            guard let jsonData = structure.description.data(using: .utf8) else {
-                let message = "Could not parse JSON structure using utf-8 encoding."
-                throw Fyper.Error.internalError(message)
-            }
-
-            logger.log("Mapping JSON to Swift Object...", kind: .debug)
-            return (file, try JSONDecoder().decode(SyntaxStructure.self, from: jsonData))
-        }
-        
         let injections = try findInjections(in: fileStructures)
         
         var roots: [InitialNode] = []
@@ -57,7 +29,7 @@ struct Analyser {
         
         logger.log("Generating call graph for \(injections.count) injection(s)...", kind: .debug)
         for initializer in injections {
-            let root = InitialNode(initializer: initializer)
+            let root = InitialNode(initializer: initializer, syntaxStructure: initializer.superSyntaxStructure)
             try buildCallingGraph(node: root, fileStructures: fileStructures)
             
             roots.append(root)
@@ -75,7 +47,7 @@ struct Analyser {
         
         for (file, syntaxStructure) in fileStructures {
             guard let filePath = file.path else {
-                throw Fyper.Error.internalError("File was not created properly. No path found.")
+                throw Fyper.Error.basic("File was not created properly. No path found.")
             }
             
             logger.log("Looking for initializers in \(filePath)...", kind: .debug)
@@ -89,7 +61,7 @@ struct Analyser {
             for initializer in initializers {
                 guard let location = file.stringView.lineAndCharacter(forCharacterOffset: initializer.offset) else {
                     let message = "Initializer offset \(initializer.offset) was not found in file \(filePath)."
-                    throw Fyper.Error.internalError(message)
+                    throw Fyper.Error.basic(message)
                 }
                 
                 let line = location.line - 1 // make line index 0 based
@@ -115,7 +87,7 @@ struct Analyser {
                 
                 guard let injectionKind = Injection.Kind(rawValue: lineContent) else {
                     let message = Fyper.Error.Message(message: "Unrecognised injection kind.", line: commentLine.index, file: filePath)
-                    throw Fyper.Error.parseError(message)
+                    throw Fyper.Error.detail(message)
                 }
                 
                 logger.log("\(initializer) will be \(injectionKind.rawValue).", kind: .debug)
@@ -157,7 +129,7 @@ struct Analyser {
             
             logger.log("Found initializer in \(typename) with \(arguments.count) argument(s).", kind: .debug)
 
-            return Initializer(typename: typename, offset: offset, arguments: arguments)
+            return Initializer(typename: typename, offset: offset, arguments: arguments, superSyntaxStructure: syntaxStructure)
         } ?? []
     }
     
@@ -172,7 +144,7 @@ struct Analyser {
             
             logger.log("Found call to \(parent.typename) initializer in \(file.path!) by \(initializingClass).", kind: .debug)
             
-            let node = CallingNode(parent: parent, typename: initializingClass)
+            let node = CallingNode(parent: parent, typename: initializingClass, syntaxStructure: syntaxStructure)
             parent.addChild(node)
             
             try buildCallingGraph(node: node, fileStructures: fileStructures)

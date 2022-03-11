@@ -12,6 +12,7 @@ protocol Node: class, CustomStringConvertible {
     var typename: String { get }
     var children: AnyCollection<Node> { get }
     var parent: Node? { get }
+    var syntaxStructure: SyntaxStructure { get }
     
     @discardableResult
     func addChild<C: Node & Hashable>(_ child: C) -> Bool

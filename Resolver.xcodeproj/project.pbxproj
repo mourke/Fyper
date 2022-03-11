@@ -26,6 +26,7 @@
 		4CA289B625771DF6000C6F95 /* ResolverCyclicDependencyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA289B525771DF6000C6F95 /* ResolverCyclicDependencyTests.swift */; };
 		BD065F6A27A1868B0026A09A /* DynamicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD065F6927A1868B0026A09A /* DynamicTests.swift */; };
 		BD065F7B27A195D50026A09A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD065F7A27A195D50026A09A /* main.swift */; };
+		BD1F140427CFCD8A008CD9AE /* Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD1F140327CFCD8A008CD9AE /* Validator.swift */; };
 		BD45921A27AA8B2600FAE4B1 /* CoffeeMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45921927AA8B2600FAE4B1 /* CoffeeMaker.swift */; };
 		BD45921C27AA8B3300FAE4B1 /* Pump.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45921B27AA8B3300FAE4B1 /* Pump.swift */; };
 		BD45921E27AA8B4700FAE4B1 /* Heater.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45921D27AA8B4700FAE4B1 /* Heater.swift */; };
@@ -46,10 +47,13 @@
 		BD45925527B529F900FAE4B1 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45925427B529F900FAE4B1 /* Options.swift */; };
 		BD45925727B52A7200FAE4B1 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45925627B52A7200FAE4B1 /* Logger.swift */; };
 		BD45925A27C3DD4100FAE4B1 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45925927C3DD4100FAE4B1 /* Error.swift */; };
-		BD6AD93227CD33C000CD03DB /* SourceKitten+SwiftExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6AD93127CD33C000CD03DB /* SourceKitten+SwiftExpression.swift */; };
+		BD6AD93227CD33C000CD03DB /* SwiftExpressionKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6AD93127CD33C000CD03DB /* SwiftExpressionKind.swift */; };
 		BD6AD93427CD364200CD03DB /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6AD93327CD364200CD03DB /* Node.swift */; };
 		BD6AD93627CE1EC900CD03DB /* CallingNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6AD93527CE1EC900CD03DB /* CallingNode.swift */; };
 		BD6AD93827CE1ED600CD03DB /* InitialNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6AD93727CE1ED600CD03DB /* InitialNode.swift */; };
+		BDEB1A9C27DBB100005F0C56 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEB1A9B27DBB100005F0C56 /* Parser.swift */; };
+		BDEB1A9E27DBBB98005F0C56 /* SwiftStatementKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEB1A9D27DBBB98005F0C56 /* SwiftStatementKind.swift */; };
+		BDEB1AA027DBC9B3005F0C56 /* FunctionArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEB1A9F27DBC9B3005F0C56 /* FunctionArgument.swift */; };
 		OBJ_40 /* Resolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Resolver.swift */; };
 		OBJ_47 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_58 /* ResolverBasicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* ResolverBasicTests.swift */; };
@@ -131,6 +135,7 @@
 		BD065F6C27A186B70026A09A /* Fyper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fyper.swift; sourceTree = "<group>"; };
 		BD065F7327A195960026A09A /* DynamicProject */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DynamicProject; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD065F7A27A195D50026A09A /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		BD1F140327CFCD8A008CD9AE /* Validator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validator.swift; sourceTree = "<group>"; };
 		BD45921927AA8B2600FAE4B1 /* CoffeeMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeMaker.swift; sourceTree = "<group>"; };
 		BD45921B27AA8B3300FAE4B1 /* Pump.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pump.swift; sourceTree = "<group>"; };
 		BD45921D27AA8B4700FAE4B1 /* Heater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Heater.swift; sourceTree = "<group>"; };
@@ -147,10 +152,13 @@
 		BD45925427B529F900FAE4B1 /* Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 		BD45925627B52A7200FAE4B1 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		BD45925927C3DD4100FAE4B1 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
-		BD6AD93127CD33C000CD03DB /* SourceKitten+SwiftExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SourceKitten+SwiftExpression.swift"; sourceTree = "<group>"; };
+		BD6AD93127CD33C000CD03DB /* SwiftExpressionKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftExpressionKind.swift; sourceTree = "<group>"; };
 		BD6AD93327CD364200CD03DB /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		BD6AD93527CE1EC900CD03DB /* CallingNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallingNode.swift; sourceTree = "<group>"; };
 		BD6AD93727CE1ED600CD03DB /* InitialNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialNode.swift; sourceTree = "<group>"; };
+		BDEB1A9B27DBB100005F0C56 /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		BDEB1A9D27DBBB98005F0C56 /* SwiftStatementKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftStatementKind.swift; sourceTree = "<group>"; };
+		BDEB1A9F27DBC9B3005F0C56 /* FunctionArgument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionArgument.swift; sourceTree = "<group>"; };
 		OBJ_12 /* ResolverBasicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolverBasicTests.swift; sourceTree = "<group>"; };
 		OBJ_13 /* ResolverClassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolverClassTests.swift; sourceTree = "<group>"; };
 		OBJ_14 /* ResolverContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolverContainerTests.swift; sourceTree = "<group>"; };
@@ -168,7 +176,6 @@
 		OBJ_31 /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
 		OBJ_32 /* Resolver.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = Resolver.podspec; sourceTree = "<group>"; };
 		OBJ_33 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		OBJ_34 /* _config.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = _config.yml; sourceTree = "<group>"; };
 		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		OBJ_9 /* Resolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resolver.swift; sourceTree = "<group>"; };
 		"Resolver::Resolver::Product" /* Resolver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Resolver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -229,20 +236,16 @@
 		BD065F6B27A186B70026A09A /* Dynamic */ = {
 			isa = PBXGroup;
 			children = (
+				BDEB1AA127DBC9D0005F0C56 /* Models */,
 				BD45922B27AA8F9500FAE4B1 /* Extensions */,
 				BD065F6C27A186B70026A09A /* Fyper.swift */,
+				BDEB1A9B27DBB100005F0C56 /* Parser.swift */,
 				BD45923727AA9C5F00FAE4B1 /* Analyser.swift */,
+				BD1F140327CFCD8A008CD9AE /* Validator.swift */,
 				BD45923927AA9D3F00FAE4B1 /* Generator.swift */,
-				BD45924C27AEB9BB00FAE4B1 /* SyntaxStructure.swift */,
-				BD45924E27AEBE1D00FAE4B1 /* Initializer.swift */,
 				BD45925027B1233D00FAE4B1 /* Constants.swift */,
-				BD45925227B125CB00FAE4B1 /* Injection.swift */,
-				BD45925427B529F900FAE4B1 /* Options.swift */,
 				BD45925627B52A7200FAE4B1 /* Logger.swift */,
 				BD45925927C3DD4100FAE4B1 /* Error.swift */,
-				BD6AD93327CD364200CD03DB /* Node.swift */,
-				BD6AD93527CE1EC900CD03DB /* CallingNode.swift */,
-				BD6AD93727CE1ED600CD03DB /* InitialNode.swift */,
 			);
 			name = Dynamic;
 			path = Sources/Dynamic;
@@ -265,7 +268,6 @@
 			children = (
 				BD45922C27AA8FA000FAE4B1 /* Collection+SafeIndex.swift */,
 				BD45922F27AA966000FAE4B1 /* FileManager+Directory.swift */,
-				BD6AD93127CD33C000CD03DB /* SourceKitten+SwiftExpression.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -283,6 +285,23 @@
 				BD45924A27ADA50E00FAE4B1 /* FyperGenerated.swift */,
 			);
 			path = generated;
+			sourceTree = "<group>";
+		};
+		BDEB1AA127DBC9D0005F0C56 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				BDEB1A9F27DBC9B3005F0C56 /* FunctionArgument.swift */,
+				BD6AD93127CD33C000CD03DB /* SwiftExpressionKind.swift */,
+				BDEB1A9D27DBBB98005F0C56 /* SwiftStatementKind.swift */,
+				BD45924C27AEB9BB00FAE4B1 /* SyntaxStructure.swift */,
+				BD45924E27AEBE1D00FAE4B1 /* Initializer.swift */,
+				BD6AD93327CD364200CD03DB /* Node.swift */,
+				BD6AD93527CE1EC900CD03DB /* CallingNode.swift */,
+				BD45925227B125CB00FAE4B1 /* Injection.swift */,
+				BD6AD93727CE1ED600CD03DB /* InitialNode.swift */,
+				BD45925427B529F900FAE4B1 /* Options.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		OBJ_10 /* Tests */ = {
@@ -342,7 +361,6 @@
 				OBJ_31 /* CHANGELOG */,
 				OBJ_32 /* Resolver.podspec */,
 				OBJ_33 /* README.md */,
-				OBJ_34 /* _config.yml */,
 				BD45923F27AA9EBE00FAE4B1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -592,11 +610,15 @@
 				BD45924D27AEB9BB00FAE4B1 /* SyntaxStructure.swift in Sources */,
 				BD45922E27AA90AE00FAE4B1 /* Collection+SafeIndex.swift in Sources */,
 				BD6AD93627CE1EC900CD03DB /* CallingNode.swift in Sources */,
+				BD1F140427CFCD8A008CD9AE /* Validator.swift in Sources */,
 				BD45923027AA966000FAE4B1 /* FileManager+Directory.swift in Sources */,
 				BD45925327B125CB00FAE4B1 /* Injection.swift in Sources */,
 				BD45923A27AA9D3F00FAE4B1 /* Generator.swift in Sources */,
-				BD6AD93227CD33C000CD03DB /* SourceKitten+SwiftExpression.swift in Sources */,
+				BD6AD93227CD33C000CD03DB /* SwiftExpressionKind.swift in Sources */,
 				BD6AD93827CE1ED600CD03DB /* InitialNode.swift in Sources */,
+				BDEB1AA027DBC9B3005F0C56 /* FunctionArgument.swift in Sources */,
+				BDEB1A9E27DBBB98005F0C56 /* SwiftStatementKind.swift in Sources */,
+				BDEB1A9C27DBB100005F0C56 /* Parser.swift in Sources */,
 				BD45925527B529F900FAE4B1 /* Options.swift in Sources */,
 				BD45925127B1233D00FAE4B1 /* Constants.swift in Sources */,
 				BD6AD93427CD364200CD03DB /* Node.swift in Sources */,

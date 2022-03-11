@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Resolver
 
 @main
 class Main {
@@ -13,7 +14,11 @@ class Main {
     
     init() {
         let coffeeMaker = CoffeeMaker.init()
-        let coffeeMaker2 = CoffeeMaker.init(pump: Pump(), heater: Heater())
+        
+        Resolver.register {
+            Heater() as Heatable
+        }
+        
 
         coffeeMaker.makeCoffee()
     }

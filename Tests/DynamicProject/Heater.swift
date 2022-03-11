@@ -7,7 +7,11 @@
 
 import Foundation
 
-class Heater {
+protocol Heatable {
+    
+}
+
+class Heater: Heatable {
     
     func heat() {
         print("Heating water")

@@ -11,11 +11,17 @@ struct Initializer: Hashable, CustomStringConvertible {
     
     let typename: String
     let offset: Int
-    let arguments: [String]
+    let injectableArguments: [FunctionArgument]
+    let regularArguments: [FunctionArgument]
+    let superSyntaxStructure: SyntaxStructure
+    
+    var arguments: [FunctionArgument] {
+        injectableArguments + regularArguments
+    }
     
     var description: String {
-        let args = arguments.joined(separator: ", _: ")
-        return "\(typename).init(_: \(args))"
+        let args = arguments.map { $0.description }.joined(separator: ", ")
+        return "\(typename).init(\(args))"
     }
     
     func hash(into hasher: inout Hasher) {

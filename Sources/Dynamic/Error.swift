@@ -26,18 +26,15 @@ extension Fyper {
             }
         }
         
-        case graphError(Message)
-        case parseError(Message)
-        case internalError(String)
+        case detail(Message)
+        case basic(String)
         
         
         var description: String {
             switch self {
-            case .graphError(let message):
+            case .detail(let message):
                 return "\(message.file):\(message.line): error: \(message.message)"
-            case .parseError(let message):
-                return "\(message.file):\(message.line): error: \(message.message)"
-            case .internalError(let message):
+            case .basic(let message):
                 return "error: \(message)"
             }
         }

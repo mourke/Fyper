@@ -1,5 +1,5 @@
 //
-//  InitialNode.swift
+//  CallingNode.swift
 //  Dynamic
 //
 //  Created by Mark Bourke on 01/03/2022.
@@ -7,36 +7,36 @@
 
 import Foundation
 
-class InitialNode: Node {
-    var typename: String {
-        initializer.typename
-    }
-    let initializer: Initializer
+class CallingNode: Node {
     
+    let typename: String
     var children: AnyCollection<Node> {
         AnyCollection(_children.map { $0 as! Node })
     }
     
     private var _children: Set<AnyHashable> = []
-    weak private(set) var parent: Node? = nil
+    weak private(set) var parent: Node?
+    
+    let syntaxStructure: SyntaxStructure
     
     @discardableResult
     func addChild<C: Node & Hashable>(_ child: C) -> Bool {
         return _children.insert(child).inserted
     }
-    
-    init(initializer: Initializer) {
-        self.initializer = initializer
+
+    init(parent: Node?, typename: String, syntaxStructure: SyntaxStructure) {
+        self.parent = parent
+        self.typename = typename
+        self.syntaxStructure = syntaxStructure
     }
-    
 }
 
-extension InitialNode: Hashable {
+extension CallingNode: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(typename)
     }
 
-    static func == (lhs: InitialNode, rhs: InitialNode) -> Bool {
+    static func == (lhs: CallingNode, rhs: CallingNode) -> Bool {
         return lhs.typename == rhs.typename
     }
 }
