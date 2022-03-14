@@ -10,7 +10,6 @@ import ArgumentParser
 
 // encantation: fyper generate [--source <source directory>] [--output <output directory>]
 
-
 @main
 struct Fyper: ParsableCommand {
     
@@ -46,8 +45,9 @@ struct Fyper: ParsableCommand {
             }
             
             do {
-                let graphs = try Analyser(logger: logger, options: options).analyse()
-                
+                let files = try Parser(logger: logger, options: options).parse()
+                let graphs = try Analyser(logger: logger, fileStructures: files).analyse()
+                try Validator(logger: logger, graphs: graphs).validate()
                 try Generator(logger: logger, options: options, graphs: graphs).generate()
             } catch let e {
                 print(e)

@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol Node: class, CustomStringConvertible {
+protocol Node: AnyObject, CustomStringConvertible {
     
     var typename: String { get }
     var children: AnyCollection<Node> { get }

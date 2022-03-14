@@ -8,9 +8,12 @@
 import Foundation
 import SourceKittenFramework
 
+/// Analyses the code and returns a calling graph of all classes that need to be injected.
 struct Analyser {
     
     let logger: Logger
+    
+    /// Parsed file structures obtained from the *Parser* stage.
     let fileStructures: [FileStructure]
     
     ///
@@ -19,11 +22,12 @@ struct Analyser {
     /// Once found, the code base is then searched for every place that these classes are initialized.
     /// This repeats, building a calling graph until the first place where the classes are initialised is found.
     ///
+    /// - Throws:   Exception if the user has incorrectly declared an injection.
+    ///
     /// - Returns:  A calling graph for every class that needs to be injected, along with what needs to be injected.
     ///
     func analyse() throws -> [InitialNode] {
         let injections = try findInjections(in: fileStructures)
-        
         var roots: [InitialNode] = []
         roots.reserveCapacity(injections.count)
         
@@ -125,11 +129,19 @@ struct Analyser {
                 return nil
             }
             
-            let arguments = structure.substructure?.compactMap { $0.typename } ?? []
+            let arguments = structure.substructure?.filter {
+                $0.typename != nil
+            }.map {
+                FunctionArgument(name: $0.name, type: $0.typename!)
+            } ?? []
             
             logger.log("Found initializer in \(typename) with \(arguments.count) argument(s).", kind: .debug)
 
-            return Initializer(typename: typename, offset: offset, arguments: arguments, superSyntaxStructure: syntaxStructure)
+            return Initializer(typename: typename,
+                               offset: offset,
+                               injectableArguments: arguments,
+                               regularArguments: [], // TODO: Implement this
+                               superSyntaxStructure: syntaxStructure)
         } ?? []
     }
     

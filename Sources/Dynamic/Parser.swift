@@ -18,6 +18,8 @@ struct Parser {
     ///
     /// Parses all the Swift files in the input directory and returns them in a `FileStructure` object.
     ///
+    ///  - Throws:   Exception if the file being parsed has encoding errors.
+    ///
     /// - Returns:  All the `FileStructure` objects associated with every Swift file in arbitrary order.
     ///
     func parse() throws -> [FileStructure] {
@@ -32,17 +34,17 @@ struct Parser {
             logger.log("Parsing \(filePath)...", kind: .debug)
             guard let file = File(path: filePath) else {
                 let message = Fyper.Error.Message(message: "This file could not be parsed. Is it corrupted or using any non-utf-8 characters?", file: filePath)
-                throw Fyper.Error.parseError(message)
+                throw Fyper.Error.detail(message)
             }
             
             logger.log("Reading structure of \(filePath)...", kind: .debug)
             let structure = try Structure(file: file)
             
-            print(structure.description)
+            // print(structure.description)
 
             guard let jsonData = structure.description.data(using: .utf8) else {
                 let message = "Could not parse JSON structure using utf-8 encoding."
-                throw Fyper.Error.internalError(message)
+                throw Fyper.Error.basic(message)
             }
 
             logger.log("Mapping JSON to Swift Object...", kind: .debug)

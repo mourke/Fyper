@@ -573,7 +573,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n/Users/mourke/Library/Developer/Xcode/DerivedData/Resolver-gjkfclslhnmiungemqosjhxicjoy/Build/Products/Debug/Dynamic generate -o Tests/DynamicProject/generated -s Tests/DynamicProject\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n/Users/mourke/Library/Developer/Xcode/DerivedData/Resolver-adkubiylcouzqefynicpyobyovvp/Build/Products/Debug/Dynamic generate -o Tests/DynamicProject/generated -s Tests/DynamicProject\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

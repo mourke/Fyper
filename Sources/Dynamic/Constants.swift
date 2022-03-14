@@ -13,6 +13,9 @@ struct Constants {
     
     static let FileExtension = "swift"
     static let LinePrefix = "//fyper:"
+    static let Inject = "Resolver.register"
+    static let Resolve = "Resolver.resolve"
+    static let GeneratedVariablePrefix = "fyperGeneratedVariableName"
 }
 
 

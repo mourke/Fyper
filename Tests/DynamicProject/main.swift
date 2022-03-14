@@ -13,10 +13,14 @@ class Main {
     
     
     init() {
-        let coffeeMaker = CoffeeMaker.init()
+        let coffeeMaker = CoffeeMaker()
         
         Resolver.register {
             Heater() as Heatable
+        }
+        
+        Resolver.register {
+            Pump()
         }
         
 

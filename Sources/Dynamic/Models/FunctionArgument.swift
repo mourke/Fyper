@@ -12,8 +12,24 @@ struct FunctionArgument: Hashable, CustomStringConvertible {
     let name: String
     let type: String
     
+    private let isUsingGeneratedName: Bool
+    
+    init(name: String? = nil, type: String) {
+        self.type = type
+        if let name = name {
+            self.name = name
+            self.isUsingGeneratedName = false
+        } else {
+            self.name = Constants.GeneratedVariablePrefix + type
+            self.isUsingGeneratedName = true
+        }
+    }
+    
     var description: String {
-        "\(name): type"
+        if isUsingGeneratedName {
+            return "_ \(name): \(type)"
+        }
+        return "\(name): \(type)"
     }
     
     func hash(into hasher: inout Hasher) {

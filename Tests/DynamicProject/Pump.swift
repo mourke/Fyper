@@ -9,10 +9,6 @@ import Foundation
 
 class Pump {
     
-    // fyper: @SafeInject
-    init() {
-    }
-    
     func start() {
         print("Starting pump")
     }
