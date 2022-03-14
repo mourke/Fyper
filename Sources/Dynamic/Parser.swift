@@ -23,14 +23,12 @@ struct Parser {
     /// - Returns:  All the `FileStructure` objects associated with every Swift file in arbitrary order.
     ///
     func parse() throws -> [FileStructure] {
-        let fileNames = try FileManager.default.contentsOfDirectory(atPath: options.sourceDirectory.path)
-        let swiftFileNames = fileNames.filter { $0.components(separatedBy: ".").last == Constants.FileExtension }
+        let swiftFiles = try allSwiftFiles(at: options.sourceDirectory.path)
+        let fileNames = swiftFiles.compactMap { $0.split(separator: "/").last }
         
-        logger.log("Parsing \(swiftFileNames.count) file(s). \(swiftFileNames.joined(separator: ", "))", kind: .debug)
+        logger.log("Parsing \(swiftFiles.count) file(s). \(fileNames.joined(separator: ", "))", kind: .debug)
         
-        let fileStructures: [FileStructure] = try swiftFileNames.map { fileName in
-            let filePath = "\(options.sourceDirectory.relativePath)/\(fileName)"
-            
+        let fileStructures: [FileStructure] = try swiftFiles.map { filePath in
             logger.log("Parsing \(filePath)...", kind: .debug)
             guard let file = File(path: filePath) else {
                 let message = Fyper.Error.Message(message: "This file could not be parsed. Is it corrupted or using any non-utf-8 characters?", file: filePath)
@@ -52,5 +50,19 @@ struct Parser {
         }
         
         return fileStructures
+    }
+    
+    private func allSwiftFiles(at path: String) throws -> [String] {
+        var swiftFiles: [String] = []
+        try FileManager.default.contentsOfDirectory(atPath: path).forEach { name in
+            let subpath = "\(path)/\(name)"
+            if FileManager.default.directoryExists(atPath: subpath) {
+                swiftFiles += try allSwiftFiles(at: subpath)
+            } else if name.components(separatedBy: ".").last == Constants.FileExtension {
+                swiftFiles.append(subpath)
+            }
+        }
+        
+        return swiftFiles
     }
 }

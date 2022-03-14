@@ -16,6 +16,7 @@ struct Constants {
     static let Inject = "Resolver.register"
     static let Resolve = "Resolver.resolve"
     static let GeneratedVariablePrefix = "fyperGeneratedVariableName"
+    static let GeneratedFileName = "FyperGenerated"
 }
 
 

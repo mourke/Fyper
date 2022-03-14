@@ -57,7 +57,7 @@ extension \(initialiser.typename) {
         
         logger.log("Writing generated code to disk...", kind: .debug)
         
-        let filePath = options.outputDirectory.path + "/FyperGenerated.swift"
+        let filePath = "\(options.outputDirectory.path)/\(Constants.GeneratedFileName).swift"
         try code.write(toFile: filePath, atomically: true, encoding: .ascii)
     }
 }
