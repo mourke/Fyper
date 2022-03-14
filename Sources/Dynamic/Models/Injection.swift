@@ -11,8 +11,12 @@ import Foundation
 
 struct Injection: Hashable, CustomStringConvertible {
     
-    enum Kind: String {
+    enum Kind: String, CaseIterable {
         case safe = "@SafeInject"
+    }
+    
+    enum Argument: String, CaseIterable {
+        case arguments = "arguments"
     }
     
     let typenameToBeInjected: String

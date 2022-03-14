@@ -11,7 +11,7 @@ class InitialNode: Node {
     var typename: String {
         initializer.typename
     }
-    let initializer: Initializer
+    let initializer: InjectableInitializer
     
     var children: AnyCollection<Node> {
         AnyCollection(_children.map { $0 as! Node })
@@ -27,7 +27,7 @@ class InitialNode: Node {
         return _children.insert(child).inserted
     }
     
-    init(initializer: Initializer, syntaxStructure: SyntaxStructure) {
+    init(initializer: InjectableInitializer, syntaxStructure: SyntaxStructure) {
         self.initializer = initializer
         self.syntaxStructure = syntaxStructure
     }

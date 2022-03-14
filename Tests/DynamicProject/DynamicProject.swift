@@ -12,18 +12,17 @@ import Resolver
 class Main {
     
     
-    init() {
-        let coffeeMaker = CoffeeMaker()
-        
+    static func main() {
         Resolver.register {
-            Heater() as Heatable
+            Heater()
         }
-        
+
         Resolver.register {
             Pump()
         }
         
-
+        let coffeeMaker = CoffeeMaker.init()
+        
         coffeeMaker.makeCoffee()
     }
 }

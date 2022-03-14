@@ -25,7 +25,7 @@
 		4C9BFB0C2357D98800E6FB80 /* ResolverInjectedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BFB0B2357D98800E6FB80 /* ResolverInjectedTests.swift */; };
 		4CA289B625771DF6000C6F95 /* ResolverCyclicDependencyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA289B525771DF6000C6F95 /* ResolverCyclicDependencyTests.swift */; };
 		BD065F6A27A1868B0026A09A /* DynamicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD065F6927A1868B0026A09A /* DynamicTests.swift */; };
-		BD065F7B27A195D50026A09A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD065F7A27A195D50026A09A /* main.swift */; };
+		BD065F7B27A195D50026A09A /* DynamicProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD065F7A27A195D50026A09A /* DynamicProject.swift */; };
 		BD1F140427CFCD8A008CD9AE /* Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD1F140327CFCD8A008CD9AE /* Validator.swift */; };
 		BD45921A27AA8B2600FAE4B1 /* CoffeeMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45921927AA8B2600FAE4B1 /* CoffeeMaker.swift */; };
 		BD45921C27AA8B3300FAE4B1 /* Pump.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45921B27AA8B3300FAE4B1 /* Pump.swift */; };
@@ -39,7 +39,6 @@
 		BD45923A27AA9D3F00FAE4B1 /* Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45923927AA9D3F00FAE4B1 /* Generator.swift */; };
 		BD45924427AA9ED700FAE4B1 /* Resolver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Resolver::Resolver::Product" /* Resolver.framework */; };
 		BD45924527AA9ED700FAE4B1 /* Resolver.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = "Resolver::Resolver::Product" /* Resolver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		BD45924B27ADA50E00FAE4B1 /* FyperGenerated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45924A27ADA50E00FAE4B1 /* FyperGenerated.swift */; };
 		BD45924D27AEB9BB00FAE4B1 /* SyntaxStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45924C27AEB9BB00FAE4B1 /* SyntaxStructure.swift */; };
 		BD45924F27AEBE1D00FAE4B1 /* Initializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45924E27AEBE1D00FAE4B1 /* Initializer.swift */; };
 		BD45925127B1233D00FAE4B1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45925027B1233D00FAE4B1 /* Constants.swift */; };
@@ -54,6 +53,8 @@
 		BDEB1A9C27DBB100005F0C56 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEB1A9B27DBB100005F0C56 /* Parser.swift */; };
 		BDEB1A9E27DBBB98005F0C56 /* SwiftStatementKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEB1A9D27DBBB98005F0C56 /* SwiftStatementKind.swift */; };
 		BDEB1AA027DBC9B3005F0C56 /* FunctionArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEB1A9F27DBC9B3005F0C56 /* FunctionArgument.swift */; };
+		BDEB1AA227DF8992005F0C56 /* FyperGenerated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD45924A27ADA50E00FAE4B1 /* FyperGenerated.swift */; };
+		BDEB1AA427DFAD3D005F0C56 /* InjectableInitializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEB1AA327DFAD3D005F0C56 /* InjectableInitializer.swift */; };
 		OBJ_40 /* Resolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Resolver.swift */; };
 		OBJ_47 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_58 /* ResolverBasicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* ResolverBasicTests.swift */; };
@@ -134,7 +135,7 @@
 		BD065F6927A1868B0026A09A /* DynamicTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicTests.swift; sourceTree = "<group>"; };
 		BD065F6C27A186B70026A09A /* Fyper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fyper.swift; sourceTree = "<group>"; };
 		BD065F7327A195960026A09A /* DynamicProject */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DynamicProject; sourceTree = BUILT_PRODUCTS_DIR; };
-		BD065F7A27A195D50026A09A /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		BD065F7A27A195D50026A09A /* DynamicProject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicProject.swift; sourceTree = "<group>"; };
 		BD1F140327CFCD8A008CD9AE /* Validator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validator.swift; sourceTree = "<group>"; };
 		BD45921927AA8B2600FAE4B1 /* CoffeeMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeMaker.swift; sourceTree = "<group>"; };
 		BD45921B27AA8B3300FAE4B1 /* Pump.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pump.swift; sourceTree = "<group>"; };
@@ -159,6 +160,7 @@
 		BDEB1A9B27DBB100005F0C56 /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		BDEB1A9D27DBBB98005F0C56 /* SwiftStatementKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftStatementKind.swift; sourceTree = "<group>"; };
 		BDEB1A9F27DBC9B3005F0C56 /* FunctionArgument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionArgument.swift; sourceTree = "<group>"; };
+		BDEB1AA327DFAD3D005F0C56 /* InjectableInitializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectableInitializer.swift; sourceTree = "<group>"; };
 		OBJ_12 /* ResolverBasicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolverBasicTests.swift; sourceTree = "<group>"; };
 		OBJ_13 /* ResolverClassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolverClassTests.swift; sourceTree = "<group>"; };
 		OBJ_14 /* ResolverContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolverContainerTests.swift; sourceTree = "<group>"; };
@@ -255,7 +257,7 @@
 			isa = PBXGroup;
 			children = (
 				BD45924927ADA50E00FAE4B1 /* generated */,
-				BD065F7A27A195D50026A09A /* main.swift */,
+				BD065F7A27A195D50026A09A /* DynamicProject.swift */,
 				BD45921927AA8B2600FAE4B1 /* CoffeeMaker.swift */,
 				BD45921B27AA8B3300FAE4B1 /* Pump.swift */,
 				BD45921D27AA8B4700FAE4B1 /* Heater.swift */,
@@ -295,6 +297,7 @@
 				BDEB1A9D27DBBB98005F0C56 /* SwiftStatementKind.swift */,
 				BD45924C27AEB9BB00FAE4B1 /* SyntaxStructure.swift */,
 				BD45924E27AEBE1D00FAE4B1 /* Initializer.swift */,
+				BDEB1AA327DFAD3D005F0C56 /* InjectableInitializer.swift */,
 				BD6AD93327CD364200CD03DB /* Node.swift */,
 				BD6AD93527CE1EC900CD03DB /* CallingNode.swift */,
 				BD45925227B125CB00FAE4B1 /* Injection.swift */,
@@ -593,8 +596,8 @@
 				BD45921E27AA8B4700FAE4B1 /* Heater.swift in Sources */,
 				BD45921A27AA8B2600FAE4B1 /* CoffeeMaker.swift in Sources */,
 				BD45921C27AA8B3300FAE4B1 /* Pump.swift in Sources */,
-				BD065F7B27A195D50026A09A /* main.swift in Sources */,
-				BD45924B27ADA50E00FAE4B1 /* FyperGenerated.swift in Sources */,
+				BD065F7B27A195D50026A09A /* DynamicProject.swift in Sources */,
+				BDEB1AA227DF8992005F0C56 /* FyperGenerated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -617,6 +620,7 @@
 				BD6AD93227CD33C000CD03DB /* SwiftExpressionKind.swift in Sources */,
 				BD6AD93827CE1ED600CD03DB /* InitialNode.swift in Sources */,
 				BDEB1AA027DBC9B3005F0C56 /* FunctionArgument.swift in Sources */,
+				BDEB1AA427DFAD3D005F0C56 /* InjectableInitializer.swift in Sources */,
 				BDEB1A9E27DBBB98005F0C56 /* SwiftStatementKind.swift in Sources */,
 				BDEB1A9C27DBB100005F0C56 /* Parser.swift in Sources */,
 				BD45925527B529F900FAE4B1 /* Options.swift in Sources */,
@@ -972,7 +976,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 23;
+				DEVELOPMENT_TEAM = BQBJ6NTPEG;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -993,6 +1000,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Resolver;
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
 				SWIFT_VERSION = 5.0;
@@ -1006,7 +1014,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 23;
+				DEVELOPMENT_TEAM = BQBJ6NTPEG;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1027,6 +1038,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Resolver;
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
 				SWIFT_VERSION = 5.0;

@@ -27,12 +27,12 @@ struct Analyser {
     /// - Returns:  A calling graph for every class that needs to be injected, along with what needs to be injected.
     ///
     func analyse() throws -> [InitialNode] {
-        let injections = try findInjections(in: fileStructures)
+        let injectableInitializers = try findInjectableInitializers(in: fileStructures)
         var roots: [InitialNode] = []
-        roots.reserveCapacity(injections.count)
+        roots.reserveCapacity(injectableInitializers.count)
         
-        logger.log("Generating call graph for \(injections.count) injection(s)...", kind: .debug)
-        for initializer in injections {
+        logger.log("Generating call graph for \(injectableInitializers.count) injection(s)...", kind: .debug)
+        for initializer in injectableInitializers {
             let root = InitialNode(initializer: initializer, syntaxStructure: initializer.superSyntaxStructure)
             try buildCallingGraph(node: root, fileStructures: fileStructures)
             
@@ -46,8 +46,8 @@ struct Analyser {
     
     // MARK: - Searching for Injectable classes
     
-    private func findInjections(in fileStructures: [FileStructure]) throws -> Set<Initializer> {
-        var injections: Set<Initializer> = []
+    private func findInjectableInitializers(in fileStructures: [FileStructure]) throws -> Set<InjectableInitializer> {
+        var injectableInitializers: Set<InjectableInitializer> = []
         
         for (file, syntaxStructure) in fileStructures {
             guard let filePath = file.path else {
@@ -76,7 +76,7 @@ struct Analyser {
                     continue
                 }
                 
-                var lineContent = commentLine.content.replacingOccurrences(of: " ", with: "")
+                let lineContent = commentLine.content.replacingOccurrences(of: " ", with: "")
                 
                 logger.log("Comment found in file \(filePath) for initializer: \(initializer): \(lineContent).", kind: .debug)
                 
@@ -87,22 +87,62 @@ struct Analyser {
                 
                 logger.log("Injectable comment found in file \(filePath) for initializer: \(initializer).", kind: .debug)
                 
-                lineContent.removeFirst(Constants.LinePrefix.count)
+                let (injectionKind, arguments): (Injection.Kind, [Injection.Argument: String])
                 
-                guard let injectionKind = Injection.Kind(rawValue: lineContent) else {
-                    let message = Fyper.Error.Message(message: "Unrecognised injection kind.", line: commentLine.index, file: filePath)
+                do {
+                    (injectionKind, arguments) = try sanitise(comment: lineContent)
+                } catch Fyper.Error.basic(let message) {
+                    let message = Fyper.Error.Message(message: message, line: commentLine.index, file: filePath)
                     throw Fyper.Error.detail(message)
                 }
                 
-                logger.log("\(initializer) will be \(injectionKind.rawValue).", kind: .debug)
+                var injectableArguments: [FunctionArgument] = []
                 
-                injections.insert(initializer)
+                guard arguments.keys.contains(Injection.Argument.arguments) else {
+                    let message = Fyper.Error.Message(message: "Arguments to injection call must contain the number of arguments in the initializer to be injected.", line: commentLine.index, file: filePath)
+                    throw Fyper.Error.detail(message)
+                }
+                
+                for (argument, value) in arguments {
+                    switch argument {
+                    case .arguments:
+                        let numberOfInjectableTypes: Int
+                        let maxArguments = initializer.arguments.count
+                        
+                        if value == "*" {
+                            numberOfInjectableTypes = maxArguments
+                        } else if let number = Int(value),
+                                    number > 0 &&
+                                    number <= maxArguments {
+                            numberOfInjectableTypes = number
+                        } else {
+                            let message = Fyper.Error.Message(message: "Unrecognised argument value '\(value)'. Argument values must be either a number (greater than 0 and less than or equal to the total number of arguments in the initializer (\(maxArguments))) or an asterics denoting that all the arguments are to be injected.", line: commentLine.index, file: filePath)
+                            throw Fyper.Error.detail(message)
+                        }
+                        
+                        injectableArguments = initializer.arguments.dropLast(maxArguments - numberOfInjectableTypes)
+                    }
+                }
+                
+                let regularArguments = [FunctionArgument](initializer.arguments.dropFirst(injectableArguments.count))
+                
+                let injectableInitializer = InjectableInitializer(
+                    typename: initializer.typename,
+                    superSyntaxStructure: initializer.superSyntaxStructure,
+                    injectionKind: injectionKind,
+                    injectableArguments: injectableArguments,
+                    regularArguments: regularArguments
+                )
+                
+                logger.log("\(injectionKind.rawValue) \(injectableArguments.count) variable(s) into \(initializer.typename).", kind: .debug)
+                
+                injectableInitializers.insert(injectableInitializer)
             }
         }
         
-        logger.log("Found \(injections.count) injection(s). \(injections.map { $0.description }.joined(separator: ", "))", kind: .debug)
+        logger.log("Found \(injectableInitializers.count) injectable initializer(s). \(injectableInitializers.map { $0.description }.joined(separator: ", "))", kind: .debug)
         
-        return injections
+        return injectableInitializers
     }
     
     private func findInitializers(syntaxStructure: SyntaxStructure) -> [Initializer] {
@@ -139,10 +179,51 @@ struct Analyser {
 
             return Initializer(typename: typename,
                                offset: offset,
-                               injectableArguments: arguments,
-                               regularArguments: [], // TODO: Implement this
-                               superSyntaxStructure: syntaxStructure)
+                               superSyntaxStructure: syntaxStructure,
+                               arguments: arguments)
         } ?? []
+    }
+    
+    private func sanitise(comment: String) throws -> (Injection.Kind, [Injection.Argument: String]) {
+        var lineContent = comment
+        lineContent.removeFirst(Constants.LinePrefix.count)
+        
+        
+        let types = Injection.Kind.allCases.map { $0.rawValue }.joined(separator: "|")
+        guard let range = lineContent.range(of: "(\(types))" + #"\(.+?\)"#, options: .regularExpression) else {
+            throw Fyper.Error.basic("Unrecognised injection kind '\(lineContent)'.")
+        }
+        
+        let expression = lineContent[range]
+        let openingParenthesisIndex = expression.range(of: "(")!.upperBound
+        
+        var injectionKindString = expression[expression.startIndex..<openingParenthesisIndex]
+        var argumentString = expression[openingParenthesisIndex..<expression.endIndex]
+        
+        // remove last parenthesis
+        injectionKindString.removeLast()
+        argumentString.removeLast()
+        
+        let arguments = try argumentString.split(separator: ",").reduce(into: [Injection.Argument: String]()) {
+            let parts = $1.split(separator: ":")
+            guard parts.count == 2 else {
+                throw Fyper.Error.basic("Unrecognised argument '\($1)'. Arguments must be of the form 'label:value'.")
+            }
+            
+            let label = String(parts[0])
+            let value = String(parts[1])
+            
+            guard let argument = Injection.Argument(rawValue: label) else {
+                let message = "Unrecognised argument '\(label)'. Arguments must be one of the following:  \(Injection.Argument.allCases.map { "'\($0.rawValue)'" }.joined(separator: ","))."
+                throw Fyper.Error.basic(message)
+            }
+            
+            return $0[argument] = value
+        }
+        
+        let injectionKind = Injection.Kind(rawValue: String(injectionKindString))!
+        
+        return (injectionKind, arguments)
     }
     
     // MARK: - Building the Calling graph

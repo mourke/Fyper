@@ -13,12 +13,11 @@ class CoffeeMaker {
     private let pump: Pump
     private let heater: Heater
     
-    // fyper: @SafeInject
+    // fyper: @SafeInject(arguments: *)
     init(pump: Pump, heater: Heater) {
         self.pump = pump
         self.heater = heater
     }
-    
     
     
     func makeCoffee() {
