@@ -12,4 +12,5 @@ struct Options {
     let sourceDirectory: URL
     let outputDirectory: URL
     let verboseLogging: Bool
+    let additionalImports: [String]
 }

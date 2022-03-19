@@ -58,8 +58,13 @@ struct Parser {
             let subpath = "\(path)/\(name)"
             if FileManager.default.directoryExists(atPath: subpath) {
                 swiftFiles += try allSwiftFiles(at: subpath)
-            } else if name.components(separatedBy: ".").last == Constants.FileExtension {
-                swiftFiles.append(subpath)
+            } else {
+                let components = name.components(separatedBy: ".")
+                
+                if components.last == Constants.FileExtension &&
+                    components.first != Constants.GeneratedFileName {
+                    swiftFiles.append(subpath)
+                }
             }
         }
         

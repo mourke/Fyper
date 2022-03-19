@@ -26,12 +26,21 @@ struct Generator {
     ///   - Throws:   Exception if the generated file cannot be written to disk.
     ///
     func generate() throws {
-        var code = "import Resolver"
+        var code = options.additionalImports.map { "import \($0)" }.joined(separator: "\n")
         
         for initialNode in graphs {
             logger.log("Generating convenience initialiser for '\(initialNode.typename)'...", kind: .debug)
             
             let initialiser = initialNode.initializer
+            
+            let convenienceInit: String
+            
+            switch initialiser.superDataType {
+            case .struct:
+                convenienceInit = "init"
+            case .class:
+                convenienceInit = "convenience init"
+            }
             
             let convenienceInitArguments = initialiser.regularArguments.map { $0.description }.joined(separator: ", ")
             
@@ -46,7 +55,7 @@ struct Generator {
 
 extension \(initialiser.typename) {
     
-    convenience init(\(convenienceInitArguments)) {
+    \(convenienceInit)(\(convenienceInitArguments)) {
         \(variables)
         self.init(\(initArguments))
     }

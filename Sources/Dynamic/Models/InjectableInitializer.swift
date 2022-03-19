@@ -12,6 +12,7 @@ struct InjectableInitializer: Hashable, CustomStringConvertible {
     let typename: String
     let superSyntaxStructure: SyntaxStructure
     let injectionKind: Injection.Kind
+    let superDataType: DataType
     
     let injectableArguments: [FunctionArgument]
     let regularArguments: [FunctionArgument]

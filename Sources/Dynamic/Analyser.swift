@@ -27,14 +27,14 @@ struct Analyser {
     /// - Returns:  A calling graph for every class that needs to be injected, along with what needs to be injected.
     ///
     func analyse() throws -> [InitialNode] {
-        let injectableInitializers = try findInjectableInitializers(in: fileStructures)
+        let injectableInitializers = try findInjectableInitializers()
         var roots: [InitialNode] = []
         roots.reserveCapacity(injectableInitializers.count)
         
         logger.log("Generating call graph for \(injectableInitializers.count) injection(s)...", kind: .debug)
         for initializer in injectableInitializers {
             let root = InitialNode(initializer: initializer, syntaxStructure: initializer.superSyntaxStructure)
-            try buildCallingGraph(node: root, fileStructures: fileStructures)
+            try buildCallingGraph(node: root)
             
             roots.append(root)
         }
@@ -46,7 +46,7 @@ struct Analyser {
     
     // MARK: - Searching for Injectable classes
     
-    private func findInjectableInitializers(in fileStructures: [FileStructure]) throws -> Set<InjectableInitializer> {
+    private func findInjectableInitializers() throws -> Set<InjectableInitializer> {
         var injectableInitializers: Set<InjectableInitializer> = []
         
         for (file, syntaxStructure) in fileStructures {
@@ -130,6 +130,7 @@ struct Analyser {
                     typename: initializer.typename,
                     superSyntaxStructure: initializer.superSyntaxStructure,
                     injectionKind: injectionKind,
+                    superDataType: initializer.superDataType,
                     injectableArguments: injectableArguments,
                     regularArguments: regularArguments
                 )
@@ -145,6 +146,16 @@ struct Analyser {
         return injectableInitializers
     }
     
+    private func findTypeAliases(for type: String) -> [String] {
+        var aliases: [String] = []
+        
+        for (file, syntaxStructure) in fileStructures {
+            
+        }
+        
+        return aliases
+    }
+    
     private func findInitializers(syntaxStructure: SyntaxStructure) -> [Initializer] {
         guard let rawValue = syntaxStructure.kind,
               let kind = SwiftDeclarationKind(rawValue: rawValue),
@@ -154,6 +165,8 @@ struct Analyser {
             logger.log("Syntax structure is not a class or struct. Ignoring...", kind: .debug)
             return syntaxStructure.substructure?.flatMap { findInitializers(syntaxStructure: $0) } ?? []
         }
+        
+        let dataType: DataType = kind == .class ? .class : .struct
         
         logger.log("Looking for initializers in \(typename)...", kind: .debug)
         
@@ -180,6 +193,7 @@ struct Analyser {
             return Initializer(typename: typename,
                                offset: offset,
                                superSyntaxStructure: syntaxStructure,
+                               superDataType: dataType,
                                arguments: arguments)
         } ?? []
     }
@@ -228,7 +242,7 @@ struct Analyser {
     
     // MARK: - Building the Calling graph
     
-    private func buildCallingGraph(node parent: Node, fileStructures: [FileStructure]) throws {
+    private func buildCallingGraph(node parent: Node) throws {
         for (file, syntaxStructure) in fileStructures {
             logger.log("Searching \(file.path!) for calls to \(parent.typename) initializers...", kind: .debug)
             guard let initializingClass = fileInitializesType(parent.typename, syntaxStructure: syntaxStructure) else {
@@ -240,7 +254,7 @@ struct Analyser {
             let node = CallingNode(parent: parent, typename: initializingClass, syntaxStructure: syntaxStructure)
             parent.addChild(node)
             
-            try buildCallingGraph(node: node, fileStructures: fileStructures)
+            try buildCallingGraph(node: node)
         }
     }
     

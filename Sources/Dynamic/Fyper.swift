@@ -26,13 +26,17 @@ struct Fyper: ParsableCommand {
         @Option(name: .shortAndLong, help: "The output directory of the generated files. Fyper will create the directory if it does not exist already provided that the root directory exists already.")
         var outputDirectory: String
         
+        @Option(name: .customShort("i"), parsing: ArrayParsingStrategy.upToNextOption, help: "Any additional import statements to include in the generated code. If injected classes are in a separate module or project, specify that here.")
+        var additionalImports: [String]
+        
         @Flag(name: .shortAndLong, help: "Show more debugging information.")
         var verbose: Int
 
         mutating func run() throws {
             let options = Options(sourceDirectory: URL(fileURLWithPath: sourceDirectory),
                                   outputDirectory: URL(fileURLWithPath: outputDirectory),
-                                  verboseLogging: verbose > 0)
+                                  verboseLogging: verbose > 0,
+                                  additionalImports: additionalImports + ["Resolver"]) // always import resolver
             let logger = Logger(verboseLogging: options.verboseLogging)
             
             guard options.sourceDirectory.hasDirectoryPath && options.outputDirectory.hasDirectoryPath else {

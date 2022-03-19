@@ -12,6 +12,7 @@ struct Initializer: CustomStringConvertible {
     let typename: String
     let offset: Int
     let superSyntaxStructure: SyntaxStructure
+    let superDataType: DataType
     let arguments: [FunctionArgument]
     
     var description: String {

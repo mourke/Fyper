@@ -41,7 +41,7 @@ struct Validator {
         if searchFor(typeToBeInjected: type, syntaxStructure: node.syntaxStructure) {
             return true
         } else {
-            return node.children.contains { searchFor(typeToBeInjected: type, syntaxStructure: $0.syntaxStructure) }
+            return node.children.contains { searchNodesFor(typeToBeInjected: type, node: $0) }
         }
     }
     
