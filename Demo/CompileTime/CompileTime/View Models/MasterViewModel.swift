@@ -23,9 +23,7 @@ class MasterViewModel: Component<MasterViewModelDependency> {
     }
     
     func detailViewModel() -> DetailViewModel {
-        DetailViewModel(parent: self,
-                             name: "Mark",
-                             date: Date())
+        DetailViewModel(parent: self, name: "Mark", date: Date())
     }
     
     func track() {

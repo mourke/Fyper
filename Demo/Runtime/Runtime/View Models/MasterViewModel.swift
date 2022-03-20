@@ -20,8 +20,7 @@ struct MasterViewModel {
     }
     
     func detailViewModel() -> DetailViewModel {
-        DetailViewModel(name: "Mark",
-                             date: Date())
+        DetailViewModel(name: "Mark", date: Date())
     }
     
     mutating func track() {
