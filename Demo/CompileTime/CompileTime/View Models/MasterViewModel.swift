@@ -9,15 +9,15 @@ import Foundation
 import Shared
 import NeedleFoundation
 
-protocol MasterViewModelDependency: Dependency {
+public protocol MasterViewModelDependency: Dependency {
     var tracker: Tracker { get }
 }
 
-class MasterViewModel: Component<MasterViewModelDependency> {
+public class MasterViewModel: Component<MasterViewModelDependency> {
     let buttonTitle: String
     
     
-    init(parent: Scope, buttonTitle: String) {
+    public init(parent: Scope, buttonTitle: String) {
         self.buttonTitle = buttonTitle
         super.init(parent: parent)
     }
@@ -26,7 +26,7 @@ class MasterViewModel: Component<MasterViewModelDependency> {
         DetailViewModel(parent: self, name: "Mark", date: Date())
     }
     
-    func track() {
+    public func track() {
         dependency.tracker.track()
     }
 }

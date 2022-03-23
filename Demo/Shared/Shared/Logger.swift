@@ -9,6 +9,8 @@ import Foundation
 
 public struct Logger {
     
+    public static let shared = Logger()
+    
     public init() {
         
     }

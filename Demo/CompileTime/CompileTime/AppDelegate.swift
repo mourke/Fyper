@@ -10,28 +10,28 @@ import UIKit
 import Shared
 import NeedleFoundation
 
-class MainComponent: BootstrapComponent {
-    var tracker: Tracker {
+public class MainComponent: BootstrapComponent {
+    public var tracker: Tracker {
         shared {
             Tracker()
         }
     }
-    var logger: Logger {
+    public var logger: Logger {
         shared {
             Logger()
         }
     }
-    var authenticator: Authenticator {
+    public var authenticator: Authenticator {
         shared {
             Authenticator()
         }
     }
-    var factory: Factory {
+    public var factory: Factory {
         shared {
             Factory()
         }
     }
-    var clock: Clock {
+    public var clock: Clock {
         shared {
             Clock()
         }

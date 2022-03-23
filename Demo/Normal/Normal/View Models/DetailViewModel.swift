@@ -8,7 +8,7 @@
 import Foundation
 import Shared
 
-struct DetailViewModel {
+public struct DetailViewModel {
     
     let logger: Logger
     let authenticator: Authenticator
@@ -17,7 +17,7 @@ struct DetailViewModel {
     let name: String
     let date: Date
     
-    init(logger: Logger, authenticator: Authenticator, factory: Factory, clock: Clock, name: String, date: Date) {
+    public init(logger: Logger, authenticator: Authenticator, factory: Factory, clock: Clock, name: String, date: Date) {
         self.logger = logger
         self.authenticator = authenticator
         self.factory = factory
@@ -26,7 +26,7 @@ struct DetailViewModel {
         self.date = date
     }
     
-    func authenticate() {
+    public func authenticate() {
         authenticator.authenticate()
         clock.tick()
         factory.create()

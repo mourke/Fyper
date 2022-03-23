@@ -9,13 +9,13 @@ import Foundation
 import Shared
 import Resolver
 
-struct MasterViewModel {
+public struct MasterViewModel {
         
     @LazyInjected var tracker: Tracker
     let buttonTitle: String
     
     
-    init(buttonTitle: String) {
+    public init(buttonTitle: String) {
         self.buttonTitle = buttonTitle
     }
     
@@ -23,7 +23,7 @@ struct MasterViewModel {
         DetailViewModel(name: "Mark", date: Date())
     }
     
-    mutating func track() {
+    public mutating func track() {
         tracker.track()
     }
 }

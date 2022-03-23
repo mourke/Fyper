@@ -9,6 +9,8 @@ import Foundation
 
 public struct Clock {
     
+    public static let shared = Clock()
+    
     public init() {
         
     }

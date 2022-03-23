@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BD86123E27EB507A00D66FEB /* HybridTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD86123D27EB507A00D66FEB /* HybridTests.swift */; };
 		BDEB1B0027E4DD66005F0C56 /* HybridApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEB1AFF27E4DD66005F0C56 /* HybridApp.swift */; };
 		BDEB1B0427E4DD67005F0C56 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BDEB1B0327E4DD67005F0C56 /* Assets.xcassets */; };
 		BDEB1B1527E4E48E005F0C56 /* Resolver in Frameworks */ = {isa = PBXBuildFile; productRef = BDEB1B1427E4E48E005F0C56 /* Resolver */; };
@@ -19,6 +20,16 @@
 		BDEB1B7F27E5CF9A005F0C56 /* MasterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEB1B7627E5CF9A005F0C56 /* MasterViewModel.swift */; };
 		BDEB1B8127E5DE80005F0C56 /* FyperGenerated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEB1B8027E5DE80005F0C56 /* FyperGenerated.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BD86123F27EB507A00D66FEB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BDEB1AF427E4DD66005F0C56 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BDEB1AFB27E4DD66005F0C56;
+			remoteInfo = Hybrid;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		BDEB1B3B27E4E633005F0C56 /* Embed Frameworks */ = {
@@ -35,6 +46,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BD86123B27EB507A00D66FEB /* HybridTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HybridTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BD86123D27EB507A00D66FEB /* HybridTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HybridTests.swift; sourceTree = "<group>"; };
 		BDEB1AFC27E4DD66005F0C56 /* Hybrid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hybrid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BDEB1AFF27E4DD66005F0C56 /* HybridApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HybridApp.swift; sourceTree = "<group>"; };
 		BDEB1B0327E4DD67005F0C56 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -49,6 +62,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		BD86123827EB507A00D66FEB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BDEB1AF927E4DD66005F0C56 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -61,10 +81,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BD86123C27EB507A00D66FEB /* HybridTests */ = {
+			isa = PBXGroup;
+			children = (
+				BD86123D27EB507A00D66FEB /* HybridTests.swift */,
+			);
+			path = HybridTests;
+			sourceTree = "<group>";
+		};
 		BDEB1AF327E4DD66005F0C56 = {
 			isa = PBXGroup;
 			children = (
 				BDEB1AFE27E4DD66005F0C56 /* Hybrid */,
+				BD86123C27EB507A00D66FEB /* HybridTests */,
 				BDEB1AFD27E4DD66005F0C56 /* Products */,
 				BDEB1B3027E4E615005F0C56 /* Frameworks */,
 			);
@@ -74,6 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				BDEB1AFC27E4DD66005F0C56 /* Hybrid.app */,
+				BD86123B27EB507A00D66FEB /* HybridTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -129,6 +159,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		BD86123A27EB507A00D66FEB /* HybridTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BD86124327EB507A00D66FEB /* Build configuration list for PBXNativeTarget "HybridTests" */;
+			buildPhases = (
+				BD86123727EB507A00D66FEB /* Sources */,
+				BD86123827EB507A00D66FEB /* Frameworks */,
+				BD86123927EB507A00D66FEB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BD86124027EB507A00D66FEB /* PBXTargetDependency */,
+			);
+			name = HybridTests;
+			productName = HybridTests;
+			productReference = BD86123B27EB507A00D66FEB /* HybridTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		BDEB1AFB27E4DD66005F0C56 /* Hybrid */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BDEB1B0A27E4DD67005F0C56 /* Build configuration list for PBXNativeTarget "Hybrid" */;
@@ -161,6 +209,10 @@
 				LastSwiftUpdateCheck = 1320;
 				LastUpgradeCheck = 1320;
 				TargetAttributes = {
+					BD86123A27EB507A00D66FEB = {
+						CreatedOnToolsVersion = 13.2.1;
+						TestTargetID = BDEB1AFB27E4DD66005F0C56;
+					};
 					BDEB1AFB27E4DD66005F0C56 = {
 						CreatedOnToolsVersion = 13.2.1;
 					};
@@ -183,11 +235,19 @@
 			projectRoot = "";
 			targets = (
 				BDEB1AFB27E4DD66005F0C56 /* Hybrid */,
+				BD86123A27EB507A00D66FEB /* HybridTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		BD86123927EB507A00D66FEB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BDEB1AFA27E4DD66005F0C56 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -220,6 +280,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		BD86123727EB507A00D66FEB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD86123E27EB507A00D66FEB /* HybridTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BDEB1AF827E4DD66005F0C56 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -236,7 +304,51 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		BD86124027EB507A00D66FEB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BDEB1AFB27E4DD66005F0C56 /* Hybrid */;
+			targetProxy = BD86123F27EB507A00D66FEB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		BD86124127EB507A00D66FEB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BQBJ6NTPEG;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fyper.HybridTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hybrid.app/Hybrid";
+			};
+			name = Debug;
+		};
+		BD86124227EB507A00D66FEB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BQBJ6NTPEG;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fyper.HybridTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hybrid.app/Hybrid";
+			};
+			name = Release;
+		};
 		BDEB1B0827E4DD67005F0C56 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -412,6 +524,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		BD86124327EB507A00D66FEB /* Build configuration list for PBXNativeTarget "HybridTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BD86124127EB507A00D66FEB /* Debug */,
+				BD86124227EB507A00D66FEB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		BDEB1AF727E4DD66005F0C56 /* Build configuration list for PBXProject "Hybrid" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -8,10 +8,10 @@
 import Foundation
 import Shared
 
-struct MasterViewModel {
-    let tracker: Tracker
-    let buttonTitle: String
+public struct MasterViewModel {
     
+    let buttonTitle: String
+    let tracker: Tracker
     
     let logger: Logger
     let authenticator: Authenticator
@@ -19,7 +19,7 @@ struct MasterViewModel {
     let clock: Clock
     
     
-    init(tracker: Tracker, buttonTitle: String, logger: Logger, authenticator: Authenticator, factory: Factory, clock: Clock) {
+    public init(tracker: Tracker, buttonTitle: String, logger: Logger, authenticator: Authenticator, factory: Factory, clock: Clock) {
         self.logger = logger
         self.buttonTitle = buttonTitle
         self.tracker = tracker
@@ -37,7 +37,7 @@ struct MasterViewModel {
                         date: Date())
     }
     
-    func track() {
+    public func track() {
         tracker.track()
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 import Shared
 import Resolver
 
-struct DetailViewModel {
+public struct DetailViewModel {
     
     @LazyInjected var logger: Logger
     @LazyInjected var authenticator: Authenticator
@@ -18,12 +18,12 @@ struct DetailViewModel {
     let name: String
     let date: Date
     
-    init(name: String, date: Date) {
+    public init(name: String, date: Date) {
         self.name = name
         self.date = date
     }
     
-    mutating func authenticate() {
+    public mutating func authenticate() {
         authenticator.authenticate()
         clock.tick()
         factory.create()

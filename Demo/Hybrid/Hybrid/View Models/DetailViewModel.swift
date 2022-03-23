@@ -9,7 +9,7 @@ import Foundation
 import Shared
 import Resolver
 
-struct DetailViewModel {
+public struct DetailViewModel {
         
     let logger: Logger
     let authenticator: Authenticator
@@ -19,7 +19,7 @@ struct DetailViewModel {
     let date: Date
     
     // fyper: @SafeInject(arguments: 4)
-    init(logger: Logger, authenticator: Authenticator, factory: Factory, clock: Clock, name: String, date: Date) {
+    public init(logger: Logger, authenticator: Authenticator, factory: Factory, clock: Clock, name: String, date: Date) {
         self.logger = logger
         self.authenticator = authenticator
         self.factory = factory
@@ -28,7 +28,7 @@ struct DetailViewModel {
         self.date = date
     }
     
-    mutating func authenticate() {
+    public mutating func authenticate() {
         authenticator.authenticate()
         clock.tick()
         factory.create()

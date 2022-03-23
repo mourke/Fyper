@@ -7,16 +7,13 @@
 
 import Foundation
 import Shared
-import Resolver
 
-public struct MasterViewModel {
+struct MasterViewModel {
         
-    let tracker: Tracker
     let buttonTitle: String
     
-    // fyper: @SafeInject(arguments: 1)
-    public init(tracker: Tracker, buttonTitle: String) {
-        self.tracker = tracker
+    
+    init(buttonTitle: String) {
         self.buttonTitle = buttonTitle
     }
     
@@ -24,7 +21,7 @@ public struct MasterViewModel {
         DetailViewModel(name: "Mark", date: Date())
     }
     
-    public mutating func track() {
-        tracker.track()
+    mutating func track() {
+        Tracker.shared.track()
     }
 }

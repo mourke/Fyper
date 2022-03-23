@@ -9,6 +9,8 @@ import Foundation
 
 public struct Tracker {
     
+    public static let shared = Tracker()
+    
     public init() {
         
     }

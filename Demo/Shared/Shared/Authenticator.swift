@@ -9,6 +9,8 @@ import Foundation
 
 public struct Authenticator {
     
+    public static let shared = Authenticator()
+    
     public init() {
         
     }

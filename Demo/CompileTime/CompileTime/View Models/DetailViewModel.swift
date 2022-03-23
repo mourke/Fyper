@@ -9,7 +9,7 @@ import Foundation
 import Shared
 import NeedleFoundation
 
-protocol DetailViewModelDependency: Dependency {
+public protocol DetailViewModelDependency: Dependency {
     var tracker: Tracker { get }
     var logger: Logger { get }
     var authenticator: Authenticator { get }
@@ -17,18 +17,18 @@ protocol DetailViewModelDependency: Dependency {
     var clock: Clock { get }
 }
 
-class DetailViewModel: Component<DetailViewModelDependency> {
+public class DetailViewModel: Component<DetailViewModelDependency> {
     let name: String
     let date: Date
     
-    init(parent: Scope, name: String, date: Date) {
+    public init(parent: Scope, name: String, date: Date) {
         self.name = name
         self.date = date
         
         super.init(parent: parent)
     }
     
-    func authenticate() {
+    public func authenticate() {
         dependency.authenticator.authenticate()
         dependency.clock.tick()
         dependency.factory.create()

@@ -9,6 +9,8 @@ import Foundation
 
 public struct Factory {
     
+    public static let shared = Factory()
+    
     public init() {
         
     }

@@ -5,6 +5,9 @@
       location = "group:Shared/Shared.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:Singleton/Singleton.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Hybrid/Hybrid.xcodeproj">
    </FileRef>
    <FileRef
