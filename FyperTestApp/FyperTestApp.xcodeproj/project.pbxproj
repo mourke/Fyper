@@ -10,29 +10,47 @@
 		1A15624A2A4E055900F177DD /* Macros in Frameworks */ = {isa = PBXBuildFile; productRef = 1A1562492A4E055900F177DD /* Macros */; };
 		1A15624C2A4E055900F177DD /* Resolver in Frameworks */ = {isa = PBXBuildFile; productRef = 1A15624B2A4E055900F177DD /* Resolver */; };
 		1A15624E2A4E055900F177DD /* Analyser in Frameworks */ = {isa = PBXBuildFile; productRef = 1A15624D2A4E055900F177DD /* Analyser */; };
+		1A88CF8B2A5C594D007D3239 /* FirstCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88CF8A2A5C594D007D3239 /* FirstCoordinator.swift */; };
+		1A88CF8E2A5C5993007D3239 /* ThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88CF8D2A5C5993007D3239 /* ThirdViewController.swift */; };
+		1A88CF8F2A5C5993007D3239 /* ThirdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88CF8C2A5C5993007D3239 /* ThirdViewModel.swift */; };
+		1A88CF922A5C59E4007D3239 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88CF912A5C59E4007D3239 /* Tracker.swift */; };
+		1A88CF952A5C5A29007D3239 /* FirstViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A88CF942A5C5A29007D3239 /* FirstViewController.xib */; };
+		1A88CF992A5C5D0B007D3239 /* SecondCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88CF972A5C5D0B007D3239 /* SecondCoordinator.swift */; };
+		1A88CF9C2A5C5F26007D3239 /* WebViewAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88CF9B2A5C5F26007D3239 /* WebViewAuthenticator.swift */; };
+		1A88CF9F2A5C5FD5007D3239 /* ThirdCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88CF9D2A5C5FD5007D3239 /* ThirdCoordinator.swift */; };
+		1A88CFA22A5C62F1007D3239 /* SecondViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A88CF982A5C5D0B007D3239 /* SecondViewController.xib */; };
+		1A88CFA32A5C62F3007D3239 /* ThirdViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A88CF9E2A5C5FD5007D3239 /* ThirdViewController.xib */; };
 		1A9D43342A4D8BDA00D5F19C /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 1A9D43332A4D8BDA00D5F19C /* ArgumentParser */; };
 		1A9D43362A4DF9C900D5F19C /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D43352A4DF9C900D5F19C /* Logger.swift */; };
-		1A9D43382A4DF9FD00D5F19C /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D43372A4DF9FD00D5F19C /* ViewModel.swift */; };
-		1A9D433A2A4DFA0A00D5F19C /* ChildViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D43392A4DFA0A00D5F19C /* ChildViewModel.swift */; };
-		1A9D433C2A4DFA2500D5F19C /* ChildViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D433B2A4DFA2500D5F19C /* ChildViewController.swift */; };
+		1A9D43382A4DF9FD00D5F19C /* FirstViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D43372A4DF9FD00D5F19C /* FirstViewModel.swift */; };
+		1A9D433A2A4DFA0A00D5F19C /* SecondViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D43392A4DFA0A00D5F19C /* SecondViewModel.swift */; };
+		1A9D433C2A4DFA2500D5F19C /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D433B2A4DFA2500D5F19C /* SecondViewController.swift */; };
 		1ACC96E32A39CDEC00CEA6CC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACC96E22A39CDEC00CEA6CC /* AppDelegate.swift */; };
 		1ACC96E52A39CDEC00CEA6CC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACC96E42A39CDEC00CEA6CC /* SceneDelegate.swift */; };
-		1ACC96E72A39CDEC00CEA6CC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACC96E62A39CDEC00CEA6CC /* ViewController.swift */; };
-		1ACC96EA2A39CDEC00CEA6CC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1ACC96E82A39CDEC00CEA6CC /* Main.storyboard */; };
+		1ACC96E72A39CDEC00CEA6CC /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACC96E62A39CDEC00CEA6CC /* FirstViewController.swift */; };
 		1ACC96EC2A39CDEE00CEA6CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1ACC96EB2A39CDEE00CEA6CC /* Assets.xcassets */; };
 		1ACC96EF2A39CDEE00CEA6CC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1ACC96ED2A39CDEE00CEA6CC /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1A88CF8A2A5C594D007D3239 /* FirstCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstCoordinator.swift; sourceTree = "<group>"; };
+		1A88CF8C2A5C5993007D3239 /* ThirdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdViewModel.swift; sourceTree = "<group>"; };
+		1A88CF8D2A5C5993007D3239 /* ThirdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdViewController.swift; sourceTree = "<group>"; };
+		1A88CF912A5C59E4007D3239 /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
+		1A88CF942A5C5A29007D3239 /* FirstViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FirstViewController.xib; sourceTree = "<group>"; };
+		1A88CF972A5C5D0B007D3239 /* SecondCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondCoordinator.swift; sourceTree = "<group>"; };
+		1A88CF982A5C5D0B007D3239 /* SecondViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SecondViewController.xib; sourceTree = "<group>"; };
+		1A88CF9B2A5C5F26007D3239 /* WebViewAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewAuthenticator.swift; sourceTree = "<group>"; };
+		1A88CF9D2A5C5FD5007D3239 /* ThirdCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdCoordinator.swift; sourceTree = "<group>"; };
+		1A88CF9E2A5C5FD5007D3239 /* ThirdViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ThirdViewController.xib; sourceTree = "<group>"; };
 		1A9D43352A4DF9C900D5F19C /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
-		1A9D43372A4DF9FD00D5F19C /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
-		1A9D43392A4DFA0A00D5F19C /* ChildViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildViewModel.swift; sourceTree = "<group>"; };
-		1A9D433B2A4DFA2500D5F19C /* ChildViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildViewController.swift; sourceTree = "<group>"; };
+		1A9D43372A4DF9FD00D5F19C /* FirstViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewModel.swift; sourceTree = "<group>"; };
+		1A9D43392A4DFA0A00D5F19C /* SecondViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewModel.swift; sourceTree = "<group>"; };
+		1A9D433B2A4DFA2500D5F19C /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		1ACC96DF2A39CDEC00CEA6CC /* FyperTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FyperTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1ACC96E22A39CDEC00CEA6CC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1ACC96E42A39CDEC00CEA6CC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		1ACC96E62A39CDEC00CEA6CC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		1ACC96E92A39CDEC00CEA6CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1ACC96E62A39CDEC00CEA6CC /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
 		1ACC96EB2A39CDEE00CEA6CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1ACC96EE2A39CDEE00CEA6CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1ACC96F02A39CDEE00CEA6CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -53,6 +71,49 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A88CF902A5C59DC007D3239 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				1A9D43352A4DF9C900D5F19C /* Logger.swift */,
+				1A88CF912A5C59E4007D3239 /* Tracker.swift */,
+				1A88CF9B2A5C5F26007D3239 /* WebViewAuthenticator.swift */,
+			);
+			path = Dependencies;
+			sourceTree = "<group>";
+		};
+		1A88CF932A5C5A12007D3239 /* First */ = {
+			isa = PBXGroup;
+			children = (
+				1ACC96E62A39CDEC00CEA6CC /* FirstViewController.swift */,
+				1A9D43372A4DF9FD00D5F19C /* FirstViewModel.swift */,
+				1A88CF8A2A5C594D007D3239 /* FirstCoordinator.swift */,
+				1A88CF942A5C5A29007D3239 /* FirstViewController.xib */,
+			);
+			path = First;
+			sourceTree = "<group>";
+		};
+		1A88CF962A5C5D03007D3239 /* Second */ = {
+			isa = PBXGroup;
+			children = (
+				1A9D43392A4DFA0A00D5F19C /* SecondViewModel.swift */,
+				1A9D433B2A4DFA2500D5F19C /* SecondViewController.swift */,
+				1A88CF972A5C5D0B007D3239 /* SecondCoordinator.swift */,
+				1A88CF982A5C5D0B007D3239 /* SecondViewController.xib */,
+			);
+			path = Second;
+			sourceTree = "<group>";
+		};
+		1A88CF9A2A5C5EB6007D3239 /* Third */ = {
+			isa = PBXGroup;
+			children = (
+				1A88CF8C2A5C5993007D3239 /* ThirdViewModel.swift */,
+				1A88CF8D2A5C5993007D3239 /* ThirdViewController.swift */,
+				1A88CF9D2A5C5FD5007D3239 /* ThirdCoordinator.swift */,
+				1A88CF9E2A5C5FD5007D3239 /* ThirdViewController.xib */,
+			);
+			path = Third;
+			sourceTree = "<group>";
+		};
 		1ACC96D62A39CDEC00CEA6CC = {
 			isa = PBXGroup;
 			children = (
@@ -72,17 +133,15 @@
 		1ACC96E12A39CDEC00CEA6CC /* FyperTestApp */ = {
 			isa = PBXGroup;
 			children = (
+				1A88CF932A5C5A12007D3239 /* First */,
+				1A88CF902A5C59DC007D3239 /* Dependencies */,
 				1ACC96E22A39CDEC00CEA6CC /* AppDelegate.swift */,
 				1ACC96E42A39CDEC00CEA6CC /* SceneDelegate.swift */,
-				1ACC96E62A39CDEC00CEA6CC /* ViewController.swift */,
-				1ACC96E82A39CDEC00CEA6CC /* Main.storyboard */,
 				1ACC96EB2A39CDEE00CEA6CC /* Assets.xcassets */,
 				1ACC96ED2A39CDEE00CEA6CC /* LaunchScreen.storyboard */,
 				1ACC96F02A39CDEE00CEA6CC /* Info.plist */,
-				1A9D43352A4DF9C900D5F19C /* Logger.swift */,
-				1A9D43372A4DF9FD00D5F19C /* ViewModel.swift */,
-				1A9D43392A4DFA0A00D5F19C /* ChildViewModel.swift */,
-				1A9D433B2A4DFA2500D5F19C /* ChildViewController.swift */,
+				1A88CF962A5C5D03007D3239 /* Second */,
+				1A88CF9A2A5C5EB6007D3239 /* Third */,
 			);
 			path = FyperTestApp;
 			sourceTree = "<group>";
@@ -157,9 +216,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A88CFA22A5C62F1007D3239 /* SecondViewController.xib in Resources */,
 				1ACC96EF2A39CDEE00CEA6CC /* LaunchScreen.storyboard in Resources */,
+				1A88CF952A5C5A29007D3239 /* FirstViewController.xib in Resources */,
+				1A88CFA32A5C62F3007D3239 /* ThirdViewController.xib in Resources */,
 				1ACC96EC2A39CDEE00CEA6CC /* Assets.xcassets in Resources */,
-				1ACC96EA2A39CDEC00CEA6CC /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,13 +231,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1A9D433C2A4DFA2500D5F19C /* ChildViewController.swift in Sources */,
-				1A9D43382A4DF9FD00D5F19C /* ViewModel.swift in Sources */,
-				1A9D433A2A4DFA0A00D5F19C /* ChildViewModel.swift in Sources */,
-				1ACC96E72A39CDEC00CEA6CC /* ViewController.swift in Sources */,
+				1A88CF8B2A5C594D007D3239 /* FirstCoordinator.swift in Sources */,
+				1A88CF992A5C5D0B007D3239 /* SecondCoordinator.swift in Sources */,
+				1A9D433C2A4DFA2500D5F19C /* SecondViewController.swift in Sources */,
+				1A88CF9C2A5C5F26007D3239 /* WebViewAuthenticator.swift in Sources */,
+				1A88CF9F2A5C5FD5007D3239 /* ThirdCoordinator.swift in Sources */,
+				1A9D43382A4DF9FD00D5F19C /* FirstViewModel.swift in Sources */,
+				1A9D433A2A4DFA0A00D5F19C /* SecondViewModel.swift in Sources */,
+				1A88CF8F2A5C5993007D3239 /* ThirdViewModel.swift in Sources */,
+				1ACC96E72A39CDEC00CEA6CC /* FirstViewController.swift in Sources */,
+				1A88CF922A5C59E4007D3239 /* Tracker.swift in Sources */,
 				1ACC96E32A39CDEC00CEA6CC /* AppDelegate.swift in Sources */,
 				1ACC96E52A39CDEC00CEA6CC /* SceneDelegate.swift in Sources */,
 				1A9D43362A4DF9C900D5F19C /* Logger.swift in Sources */,
+				1A88CF8E2A5C5993007D3239 /* ThirdViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -190,14 +258,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		1ACC96E82A39CDEC00CEA6CC /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1ACC96E92A39CDEC00CEA6CC /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		1ACC96ED2A39CDEE00CEA6CC /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -339,8 +399,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FyperTestApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -367,8 +426,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FyperTestApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (

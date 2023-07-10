@@ -7,9 +7,7 @@
 
 import Foundation
 
-struct Constants {
-    private init() {}
-
+enum Constants {
     static let Inject = "Inject"
     static let Register = "Register"
     static let Init = "init"
