@@ -20,9 +20,9 @@ final class ThirdCoordinator: ThirdCoordinatorProtocol {
     }
 
     func startFlow() {
-        let viewModel = ThirdViewModel(coordinator: self)
-        let viewController = ThirdViewController(viewModel: viewModel)
-
-        presentingViewController?.present(viewController, animated: true)
+//        let viewModel = ThirdViewModel(coordinator: self)
+//        let viewController = ThirdViewController(viewModel: viewModel)
+//
+//        presentingViewController?.present(viewController, animated: true)
     }
 }

@@ -19,7 +19,6 @@ final class SecondViewModel: SecondViewModelProtocol {
     private let tracker: TrackerProtocol
     private let coordinator: SecondCoordinatorProtocol
 
-    @Inject(args: 2)
     init(logger: LoggerProtocol, tracker: TrackerProtocol, coordinator: SecondCoordinatorProtocol) {
         self.logger = logger
         self.tracker = tracker

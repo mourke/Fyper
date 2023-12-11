@@ -6,22 +6,17 @@
 //
 
 import UIKit
+import Resolver
+import Macros
 
 protocol FirstCoordinatorProtocol {
     func presentSecondViewController()
 }
 
+@Reusable(exposeAs: FirstCoordinatorProtocol, scope: .public)
 final class FirstCoordinator: FirstCoordinatorProtocol {
 
     private weak var rootViewController: UIViewController?
-
-
-    func instantiateRoot() -> UIViewController {
-        let viewModel = FirstViewModel(coordinator: self)
-        let viewController = FirstViewController(viewModel: viewModel)
-        rootViewController = viewController
-        return viewController
-    }
 
     func presentSecondViewController() {
         let secondCoordinator = SecondCoordinator(presentingViewController: rootViewController!)

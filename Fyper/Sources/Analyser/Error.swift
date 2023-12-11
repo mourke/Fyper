@@ -1,6 +1,6 @@
 //
 //  Error.swift
-//  Dynamic
+//  Fyper
 //
 //  Created by Mark Bourke on 21/02/2022.
 //

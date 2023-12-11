@@ -7,15 +7,21 @@ struct BuildPlugin: XcodeBuildToolPlugin, BuildToolPlugin {
         let generatorTool = try context.tool(named: "Analyser")
 
         let swiftFiles = target.sourceModule!.sourceFiles.filter({$0.path.extension == "swift"})
+		let outputFile = "Public/\(target.name)Container.swift"
 
         return [ .buildCommand(
-            displayName: "Validate dependency injection graph",
+            displayName: "Generate dependency container",
             executable: generatorTool.path,
             arguments: [
                 "generate",
+				"--target-name",
+				target.name,
+				"-o",
+				outputFile,
                 "--source-files"
             ] + swiftFiles.map(\.path.string),
-            inputFiles: swiftFiles.map(\.path)
+            inputFiles: swiftFiles.map(\.path),
+			outputFiles: [outputFile].map(Path.init)
         )]
     }
     
@@ -24,15 +30,21 @@ struct BuildPlugin: XcodeBuildToolPlugin, BuildToolPlugin {
         let generatorTool = try context.tool(named: "Analyser")
 
         let swiftFiles = target.inputFiles.filter({$0.path.extension == "swift"})
+		let outputFile = "Public/\(target.displayName)Container.swift"
 
         return [ .buildCommand(
-            displayName: "Validate dependency injection graph",
+            displayName: "Generate dependency container",
             executable: generatorTool.path,
             arguments: [
                 "generate",
+				"--target-name",
+				target.displayName,
+				"-o",
+				outputFile,
                 "--source-files"
             ] + swiftFiles.map(\.path.string),
-            inputFiles: swiftFiles.map(\.path)
+            inputFiles: swiftFiles.map(\.path),
+			outputFiles: [outputFile].map(Path.init)
         )]
     }
 }

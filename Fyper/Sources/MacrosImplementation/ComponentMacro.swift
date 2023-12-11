@@ -22,26 +22,17 @@ private struct CustomFixItMessage: FixItMessage {
 }
 
 private enum SyntaxError: DiagnosticMessage {
-    case onlyInitializers
-    case unsupportedBinaryOperator
-    case malformedMacro
-    case tooManyParameters(wanted: Int, maximum: Int)
+    case onlyDataStructures
 
     var message: String {
         switch self {
-        case .onlyInitializers:
-            "'@Inject' may only be applied to inializer declarations."
-        case .unsupportedBinaryOperator:
-            "The binary operator passed to '@Inject' must be the wildcard '*' operator."
-        case .malformedMacro:
-            "'@Inject' takes only one argument. The argument must either be an integer or '*' signifying all arguments are to be injected."
-        case let .tooManyParameters(wanted, maximum):
-            "Number of parameters specified by '@Inject' (\(wanted)) exceeds total number of parameters of initializer (\(maximum))."
+        case .onlyDataStructures:
+            "'@Component' may only be applied to classes, structs or actors."
         }
     }
 
     var diagnosticID: MessageID {
-        MessageID(domain: "Fyper", id: String(describing: self))
+        MessageID(domain: "com.mourke.fyper", id: String(describing: self))
     }
 
     var severity: DiagnosticSeverity {
@@ -49,16 +40,20 @@ private enum SyntaxError: DiagnosticMessage {
     }
 }
 
-enum TypeError: Error {
-    case injectNonSimpleType
-}
-
-public struct InjectMacro: PeerMacro {
+public struct ComponentMacro: MemberMacro {
     public static func expansion(
         of node: AttributeSyntax,
-        providingPeersOf declaration: some DeclSyntaxProtocol,
+		providingMembersOf declaration: some DeclGroupSyntax,
         in context: some MacroExpansionContext
     ) throws -> [DeclSyntax] {
+		return []
+
+
+		// TODO: Add extension macro to make sure the type conforms to exposeAs
+
+		// TODO: Make sure a type cannot be marked with both macros if that's possible maybe it's not
+
+		/*
         guard
             let initializer = declaration.as(InitializerDeclSyntax.self),
             let body = initializer.body
@@ -170,12 +165,13 @@ public struct InjectMacro: PeerMacro {
         }
 
         return [DeclSyntax(generatedInitializer)]
+		 */
     }
 }
 
 @main
 struct FyperMacrosPlugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
-        InjectMacro.self,
+        ComponentMacro.self,
     ]
 }

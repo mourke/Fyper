@@ -51,7 +51,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "generate --source-files /Users/mbourke/Desktop/Test.swift -v"
+            argument = "generate --target-name SalesEmail -o /Users/mbourke/Desktop/SalesEmailContainer.swift --source-files /Users/mbourke/Desktop/Test.swift -v"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

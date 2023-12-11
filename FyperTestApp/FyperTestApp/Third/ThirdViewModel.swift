@@ -14,17 +14,17 @@ protocol ThirdViewModelProtocol {
     func authenticate(webView: WKWebView)
 }
 
+@Reusable(exposeAs: ThirdViewModelProtocol)
 final class ThirdViewModel: ThirdViewModelProtocol {
 
     private let tracker: TrackerProtocol
     private let authenticator: WebViewAuthenticatorProtocol
     private let coordinator: ThirdCoordinatorProtocol
 
-    @Inject(args: 2)
     init(
         tracker: TrackerProtocol,
         authenticator: WebViewAuthenticatorProtocol,
-        coordinator: ThirdCoordinatorProtocol
+		@DependencyIgnored coordinator: ThirdCoordinatorProtocol
     ) {
         self.tracker = tracker
         self.authenticator = authenticator

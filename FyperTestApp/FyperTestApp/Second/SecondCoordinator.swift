@@ -14,23 +14,21 @@ protocol SecondCoordinatorProtocol {
 
 final class SecondCoordinator: SecondCoordinatorProtocol {
 
-    private weak var presentingViewController: UIViewController?
-
-    @Register var webViewAuthenticator: WebViewAuthenticatorProtocol = WebViewAuthenticator()
+    private unowned var presentingViewController: UIViewController
 
     init(presentingViewController: UIViewController) {
         self.presentingViewController = presentingViewController
     }
 
     func startFlow() {
-        let viewModel = SecondViewModel(coordinator: self)
-        let viewController = SecondViewController(viewModel: viewModel)
-
-        presentingViewController?.present(viewController, animated: true)
+//        let viewModel = SecondViewModel(coordinator: self)
+//        let viewController = SecondViewController(viewModel: viewModel)
+//
+//        presentingViewController.present(viewController, animated: true)
     }
 
     func presentThirdViewController() {
-        guard let presentingViewController = presentingViewController?.presentedViewController else { return }
+        guard let presentingViewController = presentingViewController.presentedViewController else { return }
         let thirdCoordinator = ThirdCoordinator(presentingViewController: presentingViewController)
         thirdCoordinator.startFlow()
     }

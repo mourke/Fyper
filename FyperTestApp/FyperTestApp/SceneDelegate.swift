@@ -12,8 +12,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-    @Register var logger: LoggerProtocol = Logger()
-    @Register var tracker: TrackerProtocol = Tracker()
+    let logger: LoggerProtocol = Logger()
+    let tracker: TrackerProtocol = Tracker()
+    let webViewAuthenticator: WebViewAuthenticatorProtocol = WebViewAuthenticator()
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
