@@ -38,7 +38,7 @@ struct Fyper: ParsableCommand {
 
             do {
                 let files = try Parser(logger: logger, swiftFiles: sourceFiles).parse()
-                let components = try Analyser(logger: logger, fileStructures: files).analyse()
+                let components = Analyser(logger: logger, fileStructures: files).analyse()
 				// TODO: Add some caching here so we don't need to generate every time
 				let container = try Generator(logger: logger, targetName: targetName, components: components).generate()
 

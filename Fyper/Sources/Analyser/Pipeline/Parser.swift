@@ -14,14 +14,16 @@ typealias FileStructure = (String, SourceFileSyntax)
 struct Parser {
 
     let logger: Logger
+
+	/// Paths to the source files that are to be statically analysed.
     let swiftFiles: [String]
 
     ///
     /// Parses all the Swift files in the input directory and returns them in a `FileStructure` object.
     ///
-    ///  - Throws:   Exception if the file being parsed has encoding errors.
+    ///	- Throws:   Exception if the file being parsed has encoding errors.
     ///
-    /// - Returns:  All the `SourceFileSyntax` objects associated with every Swift file in arbitrary order.
+    ///	- Returns:  All the `SourceFileSyntax` objects associated with every Swift file in arbitrary order.
     ///
     func parse() throws -> [FileStructure] {
         let fileNames = swiftFiles.compactMap { $0.split(separator: "/").last }

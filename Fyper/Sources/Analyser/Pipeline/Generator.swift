@@ -14,6 +14,7 @@ struct Generator {
 
     let logger: Logger
 
+	/// The name of the Xcode target whose Container is currently being generated. This is used to generate the name of the Container class.
 	let targetName: String
 
     /// The Components that should generated inside the Container, obtained from the *Analyser* stage.
@@ -26,15 +27,19 @@ struct Generator {
     ///
     func generate() throws -> String {
 		let containerTypename = "\(targetName)Container"
-		let internallyProvidedTypenames = components.map(\.exposedAs)
-		var allDependencies: [Declaration] = []
+		logger.log("Generating \(containerTypename)...", kind: .debug)
 
+		let internallyProvidedTypenames = components.map(\.exposedAs)
+
+		var allDependencies: [Declaration] = []
 		components.flatMap(\.dependencies).forEach { dependency in
 			guard !allDependencies.contains(dependency) else { return }
 			allDependencies.append(dependency)
 		}
-		var externalDependencies: [Declaration] = []
 
+		logger.log("\(allDependencies.count) unique dependencies found.", kind: .debug)
+
+		var externalDependencies: [Declaration] = []
 		for dependency in allDependencies {
 			guard !internallyProvidedTypenames.contains(dependency.variableType) &&
 					containerTypename != dependency.variableType
@@ -42,9 +47,14 @@ struct Generator {
 			externalDependencies.append(dependency)
 		}
 
+		logger.log("\(externalDependencies.count) external dependencies found.", kind: .debug)
+
 		externalDependencies.sort { $0.variableName.lowercased() < $1.variableName.lowercased() }
 
 		let singletons = components.filter(\.isSingleton)
+
+		logger.log("\(singletons.count) singletons found.", kind: .debug)
+
 		let classDecl = try ClassDeclSyntax("public final class \(raw: containerTypename)") {
 
 			buildMembers(dependencies: externalDependencies)
@@ -53,7 +63,7 @@ struct Generator {
 
 			buildInitializer(dependencies: externalDependencies)
 
-			let builders = try buildComponentBuilders(
+			let builders = buildComponentBuilders(
 				singletonVariableNames: singletons.map(\.typename).map(\.lowercasingFirst),
 				externalDependencyVariableNames: externalDependencies.map(\.variableName),
 				containerTypename: containerTypename
@@ -66,11 +76,15 @@ struct Generator {
 
 		var containerFile = ""
 		classDecl.formatted().write(to: &containerFile)
+		logger.log("Successfully generated! \n \(containerFile)", kind: .debug)
+
 		return containerFile
     }
 
 	private func buildMembers(dependencies: [Declaration]) -> MemberDeclListSyntax {
-		MemberDeclListSyntax {
+		logger.log("Building \(dependencies.count) members...", kind: .debug)
+
+		return MemberDeclListSyntax {
 			for dependency in dependencies {
 				VariableDeclSyntax(
 					modifiers: ModifierListSyntax(arrayLiteral: DeclModifierSyntax(name: .keyword(.private))),
@@ -83,14 +97,28 @@ struct Generator {
 	}
 
 	private func buildSingletons(_ singletons: [Component]) -> MemberDeclListSyntax {
-		MemberDeclListSyntax {
+		logger.log("Building \(singletons.count) singletons...", kind: .debug)
+
+		return MemberDeclListSyntax {
 			for singleton in singletons {
-				DeclSyntax("private lazy var \(raw: singleton.typename.lowercasingFirst): \(raw: singleton.exposedAs) = build\(raw: singleton.typename)()").cast(VariableDeclSyntax.self)
+				VariableDeclSyntax(
+					modifiers: .init(arrayLiteral: .init(name: .keyword(.private)), .init(name: .keyword(.lazy))),
+					.var,
+					name: .init(IdentifierPatternSyntax(identifier: .identifier(singleton.typename.lowercasingFirst))),
+					type: TypeAnnotationSyntax(type: SimpleTypeIdentifierSyntax(name: .identifier( singleton.typename))),
+					initializer: .init(value: FunctionCallExprSyntax(
+						calledExpression: IdentifierExprSyntax(identifier: .identifier("build\(singleton.typename)")),
+						leftParen: .leftParenToken(),
+						argumentList: [],
+						rightParen: .rightParenToken()
+					))
+				)
 			}
 		}
 	}
 
 	private func buildInitializer(dependencies: [Declaration]) -> InitializerDeclSyntax {
+		logger.log("Building initializer...", kind: .debug)
 		let parameterList = FunctionParameterListBuilder.FinalResult {
 			for dependency in dependencies {
 				FunctionParameterSyntax(
@@ -114,8 +142,10 @@ struct Generator {
 		singletonVariableNames: [String],
 		externalDependencyVariableNames: [String],
 		containerTypename: String
-	) throws -> [FunctionDeclSyntax] {
-		components.map { component in
+	) -> [FunctionDeclSyntax] {
+		logger.log("Building \(components.count) builders...", kind: .debug)
+
+		return components.map { component in
 			FunctionDeclSyntax(
 				identifier: .identifier("build\(component.typename)"),
 				signature: .init(input: .init(parameterListBuilder: {
@@ -138,7 +168,10 @@ struct Generator {
 									label: argument.declaration.variableName,
 									expression: IdentifierExprSyntax(identifier: .keyword(.self))
 								)
-							} else if argument.type != .parameter && !singletonVariableNames.contains(argument.declaration.variableName) && !externalDependencyVariableNames.contains(argument.declaration.variableName) {
+							} else if argument.type != .parameter && !singletonVariableNames.contains(argument.declaration.variableName) && !externalDependencyVariableNames.contains(argument.declaration.variableName) 
+							{
+								// @mbourke: If it's not a param, singleton or external dependency, call
+								// the build function directly
 								TupleExprElementSyntax(
 									label: argument.declaration.variableName,
 									expression: FunctionCallExprSyntax(

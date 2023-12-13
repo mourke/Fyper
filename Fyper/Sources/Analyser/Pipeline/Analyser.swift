@@ -9,10 +9,6 @@ import Foundation
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
-enum AnalyserError: Error {
-    case unsupportedInitializer(_ syntax: FunctionCallExprSyntax)
-}
-
 /// Analyses the code and returns a calling graph of all classes that need to be injected.
 struct Analyser {
 
@@ -21,13 +17,7 @@ struct Analyser {
 	/// Parsed file structures obtained from the *Parser* stage.
 	let fileStructures: [FileStructure]
 
-	func analyse() throws -> [Component] {
-		return try findComponents()
-	}
-
-	// MARK: - Searching for Components
-
-	private func findComponents() throws -> [Component] {
+	func analyse() -> [Component] {
 		var components: [Component] = []
 
 		for (filePath, syntaxStructure) in fileStructures {
@@ -36,13 +26,14 @@ struct Analyser {
 			logger.log("Found \(componentDeclarations.count) Component(s).", kind: .debug)
 
 			for (macro, dataStructure) in componentDeclarations {
+				logger.log("Extracting metadata from \(dataStructure.identifier.text)...", kind: .debug)
 				let typename = dataStructure.identifier.text
 				let (exposedAs, isPublic, isSingleton) = extractMetadata(from: macro)
 
 				for initializer in findInitializers(in: dataStructure) {
 					let component = Component(
 						typename: typename,
-						exposedAs: exposedAs ?? typename, 
+						exposedAs: exposedAs ?? typename,
 						arguments: separateParameterList(in: initializer),
 						isPublic: isPublic,
 						isSingleton: isSingleton
@@ -55,6 +46,8 @@ struct Analyser {
 
 		return components
 	}
+
+	// MARK: - Searching for Components
 
 	private func findComponentDeclarations(syntax: SyntaxProtocol) -> [(AttributeSyntax, DataStructureDeclSyntaxProtocol)] {
 		let children = syntax.children(viewMode: .fixedUp)
