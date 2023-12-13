@@ -53,6 +53,8 @@ public struct ComponentMacro: MemberMacro {
 
 		// TODO: Make sure a type cannot be marked with both macros if that's possible maybe it's not
 
+		// TODO:  Make sure singleton is not struct unless it's ~Copyable
+
 		/*
         guard
             let initializer = declaration.as(InitializerDeclSyntax.self),

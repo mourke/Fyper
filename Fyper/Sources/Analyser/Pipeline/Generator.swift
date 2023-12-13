@@ -17,7 +17,7 @@ struct Generator {
 	let targetName: String
 
     /// The Components that should generated inside the Container, obtained from the *Analyser* stage.
-    let components: Set<Component>
+    let components: [Component]
 
     ///
     /// Generates a file of the form 'TargetName+Container.swift' that contains all the injectable components.
@@ -25,30 +25,41 @@ struct Generator {
 	/// - Throws:   Exception if the file being generated contains malformed swift.
     ///
     func generate() throws -> String {
+		let containerTypename = "\(targetName)Container"
 		let internallyProvidedTypenames = components.map(\.exposedAs)
-		let allDependencies = components.flatMap(\.dependencies)
-		var internalDependencies: [FunctionParameterSyntax] = []
-		var externalDependencies: [FunctionParameterSyntax] = []
+		var allDependencies: [Declaration] = []
+
+		components.flatMap(\.dependencies).forEach { dependency in
+			guard !allDependencies.contains(dependency) else { return }
+			allDependencies.append(dependency)
+		}
+		var externalDependencies: [Declaration] = []
 
 		for dependency in allDependencies {
-			if let typename = dependency.type.as(SimpleTypeIdentifierSyntax.self)?.name.text,
-			   internallyProvidedTypenames.contains(typename) {
-				internalDependencies.append(dependency)
-			} else {
-				externalDependencies.append(dependency)
-			}
+			guard !internallyProvidedTypenames.contains(dependency.variableType) &&
+					containerTypename != dependency.variableType
+			else { continue }
+			externalDependencies.append(dependency)
 		}
 
-		let singletonTypes = components.filter(\.isSingleton).map(\.typename)
-		let classDecl = try ClassDeclSyntax("public final class \(raw: targetName)Container") {
+		externalDependencies.sort { $0.variableName.lowercased() < $1.variableName.lowercased() }
+
+		let singletons = components.filter(\.isSingleton)
+		let classDecl = try ClassDeclSyntax("public final class \(raw: containerTypename)") {
 
 			buildMembers(dependencies: externalDependencies)
 
-			buildSingletons(of: singletonTypes)
+			buildSingletons(singletons)
 
 			buildInitializer(dependencies: externalDependencies)
 
-			for function in try buildComponentBuilders(singletons: singletonTypes) {
+			let builders = try buildComponentBuilders(
+				singletonVariableNames: singletons.map(\.typename).map(\.lowercasingFirst),
+				externalDependencyVariableNames: externalDependencies.map(\.variableName),
+				containerTypename: containerTypename
+			)
+
+			for function in builders {
 				function
 			}
 		}
@@ -58,41 +69,103 @@ struct Generator {
 		return containerFile
     }
 
-	private func buildMembers(dependencies: [FunctionParameterSyntax]) -> MemberDeclListSyntax {
+	private func buildMembers(dependencies: [Declaration]) -> MemberDeclListSyntax {
 		MemberDeclListSyntax {
 			for dependency in dependencies {
 				VariableDeclSyntax(
+					modifiers: ModifierListSyntax(arrayLiteral: DeclModifierSyntax(name: .keyword(.private))),
 					.let,
-					name: IdentifierPatternSyntax(identifier: dependency.firstName).cast(PatternSyntax.self),
-					type: .init(type: dependency.type)
+					name: IdentifierPatternSyntax(identifier: .identifier(dependency.variableName)).cast(PatternSyntax.self),
+					type: .init(type: SimpleTypeIdentifierSyntax(name: .identifier(dependency.variableType)))
 				)
 			}
 		}
 	}
 
-	private func buildSingletons(of types: [String]) -> MemberDeclListSyntax {
+	private func buildSingletons(_ singletons: [Component]) -> MemberDeclListSyntax {
 		MemberDeclListSyntax {
-			for type in types {
-				DeclSyntax("lazy var \(raw: type.lowercasingFirst) = build\(raw: type)()").cast(VariableDeclSyntax.self)
+			for singleton in singletons {
+				DeclSyntax("private lazy var \(raw: singleton.typename.lowercasingFirst): \(raw: singleton.exposedAs) = build\(raw: singleton.typename)()").cast(VariableDeclSyntax.self)
 			}
 		}
 	}
 
-	private func buildInitializer(dependencies: [FunctionParameterSyntax]) -> InitializerDeclSyntax {
-		let parameterList = FunctionParameterListBuilder.buildFinalResult(dependencies)
-		return InitializerDeclSyntax(signature: .init(input: .init(parameterList: parameterList))) {
+	private func buildInitializer(dependencies: [Declaration]) -> InitializerDeclSyntax {
+		let parameterList = FunctionParameterListBuilder.FinalResult {
 			for dependency in dependencies {
-				let name = dependency.firstName.text
+				FunctionParameterSyntax(
+					firstName: .identifier(dependency.variableName),
+					type: SimpleTypeIdentifierSyntax(name: .identifier(dependency.variableType))
+				)
+			}
+		}
+		return InitializerDeclSyntax(
+			modifiers: ModifierListSyntax(arrayLiteral: DeclModifierSyntax(name: .keyword(.public))),
+			signature: .init(input: .init(parameterList: parameterList))
+		) {
+			for dependency in dependencies {
+				let name = dependency.variableName
 				"self.\(raw: name) = \(raw: name)"
 			}
 		}
 	}
 
-	private func buildComponentBuilders(singletons: [String]) throws -> [FunctionDeclSyntax] {
-		try components.map { component in
-			try FunctionDeclSyntax("func build\(raw: component.typename)() -> \(raw: component.exposedAs)") {
-				"fatalError()"
-			}
+	private func buildComponentBuilders(
+		singletonVariableNames: [String],
+		externalDependencyVariableNames: [String],
+		containerTypename: String
+	) throws -> [FunctionDeclSyntax] {
+		components.map { component in
+			FunctionDeclSyntax(
+				identifier: .identifier("build\(component.typename)"),
+				signature: .init(input: .init(parameterListBuilder: {
+					for parameter in component.parameters {
+						FunctionParameterSyntax(
+							firstName: .identifier(parameter.variableName),
+							type: SimpleTypeIdentifierSyntax(name: .identifier(parameter.variableType))
+						)
+					}
+				}), output: .init(returnType: builderReturnType(for: component))),
+				bodyBuilder: {
+					FunctionCallExprSyntax(
+						calledExpression: IdentifierExprSyntax(identifier: .identifier(component.typename)),
+						leftParen: .leftParenToken(),
+						rightParen: .rightParenToken()
+					) {
+						for argument in component.arguments {
+							if argument.declaration.variableType == containerTypename {
+								TupleExprElementSyntax(
+									label: argument.declaration.variableName,
+									expression: IdentifierExprSyntax(identifier: .keyword(.self))
+								)
+							} else if argument.type != .parameter && !singletonVariableNames.contains(argument.declaration.variableName) && !externalDependencyVariableNames.contains(argument.declaration.variableName) {
+								TupleExprElementSyntax(
+									label: argument.declaration.variableName,
+									expression: FunctionCallExprSyntax(
+										calledExpression: IdentifierExprSyntax(identifier: .identifier("build\(argument.declaration.variableType)")),
+										leftParen: .leftParenToken(),
+										argumentList: [], 
+										rightParen: .rightParenToken()
+									)
+								)
+							} else {
+								TupleExprElementSyntax(
+									label: argument.declaration.variableName,
+									expression: IdentifierExprSyntax(identifier: .identifier(argument.declaration.variableName))
+								)
+							}
+						}
+					}
+				}
+			)
+		}
+	}
+
+	private func builderReturnType(for component: Component) -> TypeSyntaxProtocol {
+		if component.isExposedAsProtocol {
+			return ConstrainedSugarTypeSyntax(someOrAnySpecifier: .keyword(.some), baseType: SimpleTypeIdentifierSyntax(name: .identifier(component.exposedAs)))
+		} else {
+			return SimpleTypeIdentifierSyntax(name: .identifier(component.exposedAs))
 		}
 	}
 }

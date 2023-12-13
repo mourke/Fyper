@@ -21,14 +21,14 @@ struct Analyser {
 	/// Parsed file structures obtained from the *Parser* stage.
 	let fileStructures: [FileStructure]
 
-	func analyse() throws -> Set<Component> {
+	func analyse() throws -> [Component] {
 		return try findComponents()
 	}
 
 	// MARK: - Searching for Components
 
-	private func findComponents() throws -> Set<Component> {
-		var components: Set<Component> = []
+	private func findComponents() throws -> [Component] {
+		var components: [Component] = []
 
 		for (filePath, syntaxStructure) in fileStructures {
 			logger.log("Looking for Components in \(filePath)...", kind: .debug)
@@ -40,19 +40,15 @@ struct Analyser {
 				let (exposedAs, isPublic, isSingleton) = extractMetadata(from: macro)
 
 				for initializer in findInitializers(in: dataStructure) {
-
-					let (dependencies, parameters) = separateParameterList(in: initializer)
-
 					let component = Component(
 						typename: typename,
-						exposedAs: exposedAs ?? typename,
-						parameters: parameters,
-						dependencies: dependencies,
+						exposedAs: exposedAs ?? typename, 
+						arguments: separateParameterList(in: initializer),
 						isPublic: isPublic,
 						isSingleton: isSingleton
 					)
 
-					components.insert(component)
+					components.append(component)
 				}
 			}
 		}
@@ -145,25 +141,23 @@ struct Analyser {
         return initializers
     }
 
-	private func separateParameterList(in initializer: InitializerDeclSyntax) -> (dependencies: FunctionParameterListSyntax, parameters: FunctionParameterListSyntax) {
-		var parameters: [FunctionParameterSyntax] = []
-		var dependencies: [FunctionParameterSyntax] = []
+	private func separateParameterList(in initializer: InitializerDeclSyntax) -> [Argument] {
+		var arguments: [Argument] = []
 		for parameter in initializer.signature.input.parameterList {
 			if let attributes = parameter.attributes, 
 				attributes.contains(where: isDependencyIgnored(from:)) {
-				parameters.append(cleanParameter(parameter))
+				arguments.append(Argument(declaration: toDeclaration(from: parameter), type: .parameter))
 			} else {
-				dependencies.append(cleanParameter(parameter))
+				arguments.append(Argument(declaration: toDeclaration(from: parameter), type: .dependency))
 			}
 		}
-		return (FunctionParameterListBuilder.buildFinalResult(dependencies), FunctionParameterListBuilder.buildFinalResult(parameters))
+		return arguments
 	}
 
-	private func cleanParameter(_ parameter: FunctionParameterSyntax) -> FunctionParameterSyntax {
-		FunctionParameterSyntax(
-			firstName: parameter.firstName.trimmed,
-			secondName: parameter.secondName?.trimmed,
-			type: parameter.type.trimmed
+	private func toDeclaration(from parameter: FunctionParameterSyntax) -> Declaration {
+		Declaration(
+			variableName: parameter.firstName.trimmed.text,
+			variableType: parameter.type.cast(SimpleTypeIdentifierSyntax.self).name.text
 		)
 	}
 }

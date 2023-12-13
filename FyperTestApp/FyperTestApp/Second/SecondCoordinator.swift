@@ -6,29 +6,32 @@
 //
 
 import UIKit
-import Resolver
+import Macros
 
 protocol SecondCoordinatorProtocol {
     func presentThirdViewController()
+	func startFlow()
 }
 
+@Reusable(exposeAs: SecondCoordinatorProtocol)
 final class SecondCoordinator: SecondCoordinatorProtocol {
 
-    private unowned var presentingViewController: UIViewController
+    private weak var presentingViewController: UIViewController?
+	private let container: FyperTestAppContainer
 
-    init(presentingViewController: UIViewController) {
-        self.presentingViewController = presentingViewController
+    init(container: FyperTestAppContainer) {
+		self.container = container
     }
 
     func startFlow() {
-//        let viewModel = SecondViewModel(coordinator: self)
-//        let viewController = SecondViewController(viewModel: viewModel)
-//
-//        presentingViewController.present(viewController, animated: true)
+		let viewModel = container.buildSecondViewModel(coordinator: self)
+        let viewController = SecondViewController(viewModel: viewModel)
+
+        presentingViewController?.present(viewController, animated: true)
     }
 
     func presentThirdViewController() {
-        guard let presentingViewController = presentingViewController.presentedViewController else { return }
+        guard let presentingViewController = presentingViewController?.presentedViewController else { return }
         let thirdCoordinator = ThirdCoordinator(presentingViewController: presentingViewController)
         thirdCoordinator.startFlow()
     }

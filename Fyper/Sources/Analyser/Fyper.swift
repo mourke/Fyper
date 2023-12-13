@@ -41,7 +41,14 @@ struct Fyper: ParsableCommand {
                 let components = try Analyser(logger: logger, fileStructures: files).analyse()
 				// TODO: Add some caching here so we don't need to generate every time
 				let container = try Generator(logger: logger, targetName: targetName, components: components).generate()
-				print(container)
+
+				let containerURL = URL(filePath: output)
+
+				try FileManager.default.createDirectory(
+					at: containerURL.deletingLastPathComponent(),
+					withIntermediateDirectories: true
+				)
+				try container.write(to: containerURL, atomically: true, encoding: .utf8)
             } catch let e {
                 print(e)
                 throw ExitCode.failure

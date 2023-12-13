@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol LoggerProtocol {
+public protocol LoggerProtocol {
     func log()
 }
 

@@ -12,9 +12,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-    let logger: LoggerProtocol = Logger()
-    let tracker: TrackerProtocol = Tracker()
-    let webViewAuthenticator: WebViewAuthenticatorProtocol = WebViewAuthenticator()
+    let logger = Logger()
+    let tracker = Tracker()
+    let webViewAuthenticator = WebViewAuthenticator()
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -23,8 +23,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
+		let container = FyperTestAppContainer(
+			authenticator: webViewAuthenticator,
+			logger: logger,
+			tracker: tracker
+		)
+
         window = UIWindow(windowScene: windowScene)
-        let coordinator = FirstCoordinator()
+		let coordinator = container.buildFirstCoordinator()
         window!.rootViewController = coordinator.instantiateRoot()
         window!.makeKeyAndVisible()
     }

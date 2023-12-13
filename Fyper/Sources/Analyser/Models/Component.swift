@@ -8,19 +8,19 @@
 import Foundation
 import SwiftSyntax
 
-struct Component: Hashable {
+struct Component: Equatable {
     let typename: String
 	let exposedAs: String
-    let parameters: FunctionParameterListSyntax
-    let dependencies: FunctionParameterListSyntax
+	var isExposedAsProtocol: Bool {
+		exposedAs != typename
+	}
+	let arguments: [Argument]
+	var parameters: [Declaration] {
+		arguments.filter({$0.type == .parameter}).map(\.declaration)
+	}
+	var dependencies: [Declaration] {
+		arguments.filter({$0.type == .dependency}).map(\.declaration)
+	}
 	let isPublic: Bool
 	let isSingleton: Bool
-
-    static func == (lhs: Component, rhs: Component) -> Bool {
-        lhs.typename == rhs.typename
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(typename)
-    }
 }

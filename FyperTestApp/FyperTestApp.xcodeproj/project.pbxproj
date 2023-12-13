@@ -30,6 +30,7 @@
 		1ACC96E72A39CDEC00CEA6CC /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACC96E62A39CDEC00CEA6CC /* FirstViewController.swift */; };
 		1ACC96EC2A39CDEE00CEA6CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1ACC96EB2A39CDEE00CEA6CC /* Assets.xcassets */; };
 		1ACC96EF2A39CDEE00CEA6CC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1ACC96ED2A39CDEE00CEA6CC /* LaunchScreen.storyboard */; };
+		1AFE59DA2B28C4D600C55EA6 /* FyperRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFE59D92B28C4D600C55EA6 /* FyperRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		1ACC96EB2A39CDEE00CEA6CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1ACC96EE2A39CDEE00CEA6CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1ACC96F02A39CDEE00CEA6CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1AFE59D92B28C4D600C55EA6 /* FyperRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FyperRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +144,7 @@
 				1ACC96F02A39CDEE00CEA6CC /* Info.plist */,
 				1A88CF962A5C5D03007D3239 /* Second */,
 				1A88CF9A2A5C5EB6007D3239 /* Third */,
+				1AFE59D92B28C4D600C55EA6 /* FyperRepository.swift */,
 			);
 			path = FyperTestApp;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 				1A9D433A2A4DFA0A00D5F19C /* SecondViewModel.swift in Sources */,
 				1A88CF8F2A5C5993007D3239 /* ThirdViewModel.swift in Sources */,
 				1ACC96E72A39CDEC00CEA6CC /* FirstViewController.swift in Sources */,
+				1AFE59DA2B28C4D600C55EA6 /* FyperRepository.swift in Sources */,
 				1A88CF922A5C59E4007D3239 /* Tracker.swift in Sources */,
 				1ACC96E32A39CDEC00CEA6CC /* AppDelegate.swift in Sources */,
 				1ACC96E52A39CDEC00CEA6CC /* SceneDelegate.swift in Sources */,

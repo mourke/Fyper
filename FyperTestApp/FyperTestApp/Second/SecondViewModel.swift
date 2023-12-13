@@ -13,13 +13,14 @@ protocol SecondViewModelProtocol {
     func toThirdViewController()
 }
 
+@Reusable(exposeAs: SecondViewModelProtocol)
 final class SecondViewModel: SecondViewModelProtocol {
 
     private let logger: LoggerProtocol
     private let tracker: TrackerProtocol
     private let coordinator: SecondCoordinatorProtocol
 
-    init(logger: LoggerProtocol, tracker: TrackerProtocol, coordinator: SecondCoordinatorProtocol) {
+    init(logger: LoggerProtocol, tracker: TrackerProtocol, @DependencyIgnored coordinator: SecondCoordinatorProtocol) {
         self.logger = logger
         self.tracker = tracker
         self.coordinator = coordinator

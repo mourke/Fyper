@@ -7,9 +7,9 @@ struct BuildPlugin: XcodeBuildToolPlugin, BuildToolPlugin {
         let generatorTool = try context.tool(named: "Analyser")
 
         let swiftFiles = target.sourceModule!.sourceFiles.filter({$0.path.extension == "swift"})
-		let outputFile = "Public/\(target.name)Container.swift"
+		let outputFile = context.pluginWorkDirectory.appending(subpath: "\(target.name)Container.swift")
 
-        return [ .buildCommand(
+        return [.buildCommand(
             displayName: "Generate dependency container",
             executable: generatorTool.path,
             arguments: [
@@ -17,11 +17,11 @@ struct BuildPlugin: XcodeBuildToolPlugin, BuildToolPlugin {
 				"--target-name",
 				target.name,
 				"-o",
-				outputFile,
+				outputFile.string,
                 "--source-files"
             ] + swiftFiles.map(\.path.string),
             inputFiles: swiftFiles.map(\.path),
-			outputFiles: [outputFile].map(Path.init)
+			outputFiles: [outputFile]
         )]
     }
     
@@ -30,9 +30,9 @@ struct BuildPlugin: XcodeBuildToolPlugin, BuildToolPlugin {
         let generatorTool = try context.tool(named: "Analyser")
 
         let swiftFiles = target.inputFiles.filter({$0.path.extension == "swift"})
-		let outputFile = "Public/\(target.displayName)Container.swift"
+		let outputFile = context.pluginWorkDirectory.appending(subpath: "\(target.displayName)Container.swift")
 
-        return [ .buildCommand(
+        return [.buildCommand(
             displayName: "Generate dependency container",
             executable: generatorTool.path,
             arguments: [
@@ -40,11 +40,11 @@ struct BuildPlugin: XcodeBuildToolPlugin, BuildToolPlugin {
 				"--target-name",
 				target.displayName,
 				"-o",
-				outputFile,
+				outputFile.string,
                 "--source-files"
             ] + swiftFiles.map(\.path.string),
             inputFiles: swiftFiles.map(\.path),
-			outputFiles: [outputFile].map(Path.init)
+			outputFiles: [outputFile]
         )]
     }
 }
