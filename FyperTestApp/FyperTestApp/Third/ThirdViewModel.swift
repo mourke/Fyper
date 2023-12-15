@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Resolver
 import Macros
 import WebKit
 

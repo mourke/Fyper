@@ -6,39 +6,7 @@ import SwiftParser
 import SwiftDiagnostics
 import SwiftParserDiagnostics
 import Foundation
-
-private struct CustomFixItMessage: FixItMessage {
-    let message: String
-    private let messageID: String
-
-    init(_ message: String, messageID: String = #function) {
-      self.message = message
-      self.messageID = messageID
-    }
-
-     var fixItID: MessageID {
-         MessageID(domain: "SwiftParser", id: "\(type(of: self)).\(messageID)")
-    }
-}
-
-private enum SyntaxError: DiagnosticMessage {
-    case onlyDataStructures
-
-    var message: String {
-        switch self {
-        case .onlyDataStructures:
-            "'@Component' may only be applied to classes, structs or actors."
-        }
-    }
-
-    var diagnosticID: MessageID {
-        MessageID(domain: "com.mourke.fyper", id: String(describing: self))
-    }
-
-    var severity: DiagnosticSeverity {
-        .error
-    }
-}
+import Shared
 
 public struct ComponentMacro: MemberMacro {
     public static func expansion(
@@ -46,129 +14,143 @@ public struct ComponentMacro: MemberMacro {
 		providingMembersOf declaration: some DeclGroupSyntax,
         in context: some MacroExpansionContext
     ) throws -> [DeclSyntax] {
+		let macroName = node.attributeName.cast(SimpleTypeIdentifierSyntax.self).name.text
+
+		guard
+			declaration.is(ClassDeclSyntax.self) ||
+			declaration.is(StructDeclSyntax.self) ||
+			declaration.is(ActorDeclSyntax.self)
+		else {
+			let diagnostic = Diagnostic(
+				node: node._syntaxNode,
+				message: SyntaxError.onlyDataStructures(macroName: macroName)
+			)
+			context.diagnose(diagnostic)
+			return []
+		}
+
+		let dataStructure: DataStructureDeclSyntaxProtocol = (declaration.as(ClassDeclSyntax.self) ?? declaration.as(StructDeclSyntax.self)) ?? declaration.cast(ActorDeclSyntax.self)
+
+		let macros = declaration.attributes?
+			.compactMap({ element -> SimpleTypeIdentifierSyntax? in
+				guard case .attribute(let attribute) = element else { return nil }
+				return attribute.attributeName.as(SimpleTypeIdentifierSyntax.self)
+			})
+			.filter({ $0.name.text == Constants.Reusable || $0.name.text == Constants.Singleton })
+
+		if let macros, macros.count > 1 {
+			let diagnostic = Diagnostic(
+				node: node._syntaxNode,
+				message: SyntaxError.onlyOneMacro
+			)
+			context.diagnose(diagnostic)
+			return []
+		}
+
+		if let argument = node.argument,
+		   case .argumentList(let argList) = argument,
+		   let exposedAs = argList.first(where: { $0.label?.text == Constants.ExposeAs }),
+		   let protocolName = exposedAs.expression.as(IdentifierExprSyntax.self)?.identifier.text,
+		   let inheritanceClause = dataStructure.inheritanceClause
+		{
+			let conformsToExposedAs = inheritanceClause.inheritedTypeCollection
+				.compactMap({ $0.typeName.cast(SimpleTypeIdentifierSyntax.self) })
+				.contains(where: { $0.name.text == protocolName })
+
+			if !conformsToExposedAs {
+				let newInheritanceClause = TypeInheritanceClauseSyntax {
+					let protocolType = SimpleTypeIdentifierSyntax(name: .identifier(protocolName))
+					for inheritance in inheritanceClause.inheritedTypeCollection {
+						inheritance
+					}
+					InheritedTypeSyntax(typeName: protocolType)
+				}
+
+				let addProtocolConformance = FixIt(
+					message: CustomFixItMessage("Add conformance to '\(protocolName)'"),
+					changes: [
+						.replace(
+							oldNode: inheritanceClause._syntaxNode,
+							newNode: newInheritanceClause._syntaxNode
+						)
+					]
+				)
+
+				let diagnostic = Diagnostic(
+					node: declaration._syntaxNode,
+					message: SyntaxError.mustConformToExposedAs(
+						typeName: dataStructure.identifier.text,
+						protocolName: protocolName
+					),
+					fixIts: [addProtocolConformance]
+				)
+				context.diagnose(diagnostic)
+
+				return []
+			}
+		}
+
+		if macroName == Constants.Singleton,
+		   let structDecl = declaration.as(StructDeclSyntax.self),
+		   !isNonCopyableStruct(structDecl)
+		{
+			let structName = structDecl.identifier.description
+			let becomeClass = FixIt(
+				message: CustomFixItMessage("Convert '\(structName)' to a class"),
+				changes: [
+					.replace(
+						oldNode: structDecl._syntaxNode,
+						newNode: structDecl.with(\.structKeyword, .keyword(.class))._syntaxNode
+					)
+				]
+			)
+			let inheritanceClause = TypeInheritanceClauseSyntax {
+				let nonCopyable = SuppressedTypeSyntax(
+					withoutTilde: .prefixOperator("~"),
+					patternType: SimpleTypeIdentifierSyntax(name: .identifier(Constants.Copyable))
+				)
+				InheritedTypeSyntax(typeName: nonCopyable)
+				if let inheritanceClause = structDecl.inheritanceClause {
+					for inheritance in inheritanceClause.inheritedTypeCollection {
+						inheritance
+					}
+				}
+			}
+			let addNonCopyable = FixIt(
+				message: CustomFixItMessage("Mark '\(structName)' as non-copyable"),
+				changes: [
+					.replace(
+						oldNode: structDecl._syntaxNode,
+						newNode: structDecl.with(\.inheritanceClause, inheritanceClause)._syntaxNode
+					)
+				]
+			)
+			let diagnostic = Diagnostic(
+				node: node._syntaxNode,
+				message: SyntaxError.valueTypeSingleton,
+				fixIts: [becomeClass, addNonCopyable]
+			)
+			context.diagnose(diagnostic)
+
+			return []
+		}
+
 		return []
-
-
-		// TODO: Add extension macro to make sure the type conforms to exposeAs
-
-		// TODO: Make sure a type cannot be marked with both macros if that's possible maybe it's not
-
-		// TODO:  Make sure singleton is not struct unless it's ~Copyable
-
-		/*
-        guard
-            let initializer = declaration.as(InitializerDeclSyntax.self),
-            let body = initializer.body
-        else {
-            let diagnostic = Diagnostic(
-                node: node._syntaxNode,
-                message: SyntaxError.onlyInitializers
-            )
-            context.diagnose(diagnostic)
-            return []
-        }
-
-        guard case let .argumentList(arguments) = node.argument,
-              arguments.count == 1,
-              let argument = arguments.first
-        else {
-            let diagnostic = Diagnostic(
-                node: node._syntaxNode,
-                message: SyntaxError.malformedMacro
-            )
-            context.diagnose(diagnostic)
-            return []
-        }
-
-        let parameters: [FunctionParameterSyntax] = initializer.signature.input.parameterList.map({$0})
-        let maxParameters = parameters.count
-        let numberOfInjectableParameters: Int
-
-        switch argument.expression.kind {
-        case .identifierExpr: // * = all arguments
-            let identifier = argument.expression.cast(IdentifierExprSyntax.self).identifier
-            guard identifier.text == "*" else {
-                let fixIt = FixIt(
-                    message: CustomFixItMessage("Replace '\(identifier.text)' with '*'"),
-                    changes: [
-                        .replace(
-                            oldNode: identifier._syntaxNode,
-                            newNode: TokenSyntax(stringLiteral: "*")._syntaxNode
-                        )
-                    ]
-                )
-                let diagnostic = Diagnostic(
-                    node: node._syntaxNode,
-                    message: SyntaxError.unsupportedBinaryOperator,
-                    fixIts: [fixIt]
-                )
-                context.diagnose(diagnostic)
-                return []
-            }
-            numberOfInjectableParameters = maxParameters
-        case .integerLiteralExpr: // specific number of arguments
-            let digitsString = argument.expression.cast(IntegerLiteralExprSyntax.self).digits
-            guard let digits = Int(digitsString.text) else {
-                let diagnostic = Diagnostic(
-                    node: node._syntaxNode,
-                    message: SyntaxError.malformedMacro
-                )
-                context.diagnose(diagnostic)
-                return []
-            }
-            numberOfInjectableParameters = digits
-        default:
-            let diagnostic = Diagnostic(
-                node: node._syntaxNode,
-                message: SyntaxError.malformedMacro
-            )
-            context.diagnose(diagnostic)
-            return []
-        }
-
-        guard numberOfInjectableParameters <= maxParameters else {
-            let wrongExpression = argument.expression.cast(IntegerLiteralExprSyntax.self)
-            let fixIt = FixIt(
-                message: CustomFixItMessage("Replace '\(wrongExpression.digits.text)' with '*'"),
-                changes: [
-                    .replace(
-                        oldNode: wrongExpression._syntaxNode,
-                        newNode: IdentifierExprSyntax(identifier: TokenSyntax(stringLiteral: "*"))._syntaxNode
-                    )
-                ]
-            )
-            let diagnostic = Diagnostic(
-                node: node._syntaxNode,
-                message: SyntaxError.tooManyParameters(wanted: numberOfInjectableParameters, maximum: maxParameters),
-                fixIts: [fixIt]
-            )
-            context.diagnose(diagnostic)
-            return []
-        }
-
-        let keptParameters = FunctionParameterListBuilder.buildFinalResult(Array(parameters.dropFirst(numberOfInjectableParameters)))
-        let injectedParameters = Array(parameters.dropLast(maxParameters - numberOfInjectableParameters))
-
-        let variables = try injectedParameters.map {
-            let name = $0.secondName?.text ?? $0.firstName.text
-            guard let type = $0.type.as(SimpleTypeIdentifierSyntax.self) else {
-                throw TypeError.injectNonSimpleType
-            }
-            return "let \(name) = Resolver.resolve(\(type.name.text).self)"
-        }
-
-        let generatedInitializer = try InitializerDeclSyntax("init(\(keptParameters))") {
-            for variable in variables {
-                DeclSyntax(stringLiteral: variable)
-            }
-            for statement in body.statements {
-                statement.trimmed // Remove space that's already there
-            }
-        }
-
-        return [DeclSyntax(generatedInitializer)]
-		 */
     }
+
+	private static func isNonCopyableStruct(_ structDecl: StructDeclSyntax) -> Bool {
+		guard let inheritanceClause = structDecl.inheritanceClause else {
+			return false
+		}
+		return inheritanceClause.inheritedTypeCollection
+			.compactMap({ $0.typeName.as(SuppressedTypeSyntax.self) })
+			.contains(where: {
+				guard let type = $0.patternType.as(SimpleTypeIdentifierSyntax.self) else {
+					return false
+				}
+				return type.name.text == Constants.Copyable && $0.withoutTilde == .prefixOperator("~")
+			})
+	}
 }
 
 @main

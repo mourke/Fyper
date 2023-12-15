@@ -8,6 +8,7 @@
 import Foundation
 import SwiftSyntax
 import SwiftSyntaxBuilder
+import Shared
 
 /// Analyses the code and returns a calling graph of all classes that need to be injected.
 struct Analyser {
@@ -94,7 +95,7 @@ struct Analyser {
 					exposedAs = identifier.text
 				case Constants.Scope:
 					let identifier = argument.expression.cast(MemberAccessExprSyntax.self).name
-					isPublic = identifier.text == Constants.Public
+					isPublic = identifier.text == String(describing: ComponentScope.public)
 				default:
 					fatalError()
 				}

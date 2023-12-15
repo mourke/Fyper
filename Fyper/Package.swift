@@ -9,8 +9,8 @@ let package = Package(
     platforms: [.macOS(.v13), .iOS(.v16), .tvOS(.v16), .watchOS(.v9), .macCatalyst(.v16)],
     products: [
         .library(
-            name: "Resolver",
-            targets: ["Resolver"]
+            name: "Shared",
+            targets: ["Shared"]
         ),
         .library(
             name: "Macros",
@@ -26,14 +26,15 @@ let package = Package(
     ],
     targets: [
         // Macro implementation that performs the source transformation of a macro.
+		.target(name: "Shared", dependencies: [.product(name: "SwiftSyntax", package: "swift-syntax")]),
         .macro(
             name: "MacrosImplementation",
             dependencies: [
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
-                .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
+				.target(name: "Shared")
             ]
         ),
-        .target(name: "Resolver"),
         .testTarget(
             name: "Tests",
             dependencies: [
@@ -51,11 +52,12 @@ let package = Package(
             name: "Analyser", dependencies: [
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
                 .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
-                .product(name: "ArgumentParser", package: "swift-argument-parser")
+				.product(name: "ArgumentParser", package: "swift-argument-parser"),
+				.target(name: "Shared")
             ]
         ),
 
         // Library that exposes a macro as part of its API, which is used in client programs.
-        .target(name: "Macros", dependencies: ["MacrosImplementation"]),
+        .target(name: "Macros", dependencies: ["MacrosImplementation", "Shared"]),
     ]
 )

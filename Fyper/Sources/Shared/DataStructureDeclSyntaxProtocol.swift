@@ -8,11 +8,12 @@
 import Foundation
 import SwiftSyntax
 
-protocol DataStructureDeclSyntaxProtocol: SyntaxProtocol {
+public protocol DataStructureDeclSyntaxProtocol: SyntaxProtocol {
     var identifier: TokenSyntax { get }
     var id: SyntaxIdentifier { get }
     var memberBlock: MemberDeclBlockSyntax { get }
 	var attributes: AttributeListSyntax? { get }
+	var inheritanceClause: TypeInheritanceClauseSyntax? { get }
 }
 
 extension ClassDeclSyntax: DataStructureDeclSyntaxProtocol { }

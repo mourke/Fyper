@@ -1,9 +1,6 @@
-public enum ComponentScope {
-	case `public`
-	case `internal`
-}
-
-/// 
+import Foundation
+import Shared
+///
 /// Marks the data structure as reusable. A reusable type is one that is re-created every time it is a dependency of another type.
 ///
 /// - Parameter exposeAs:	The protocol that this type will be abstracted to in the container. The type must conform to this protocol.
@@ -22,3 +19,13 @@ public macro Reusable(exposeAs: Any? = nil, scope: ComponentScope = .internal) =
 ///
 @attached(member)
 public macro Singleton(exposeAs: Any? = nil) = #externalMacro(module: "MacrosImplementation", type: "ComponentMacro")
+
+/// Marks initialiser parameter as not a dependency.
+@propertyWrapper public struct DependencyIgnored<Dependency> {
+
+	public init(wrappedValue: Dependency) {
+		self.wrappedValue = wrappedValue
+	}
+
+	public let wrappedValue: Dependency
+}

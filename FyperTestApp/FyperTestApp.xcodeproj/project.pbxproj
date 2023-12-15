@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1A15624A2A4E055900F177DD /* Macros in Frameworks */ = {isa = PBXBuildFile; productRef = 1A1562492A4E055900F177DD /* Macros */; };
-		1A15624C2A4E055900F177DD /* Resolver in Frameworks */ = {isa = PBXBuildFile; productRef = 1A15624B2A4E055900F177DD /* Resolver */; };
 		1A15624E2A4E055900F177DD /* Analyser in Frameworks */ = {isa = PBXBuildFile; productRef = 1A15624D2A4E055900F177DD /* Analyser */; };
 		1A88CF8B2A5C594D007D3239 /* FirstCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88CF8A2A5C594D007D3239 /* FirstCoordinator.swift */; };
 		1A88CF8E2A5C5993007D3239 /* ThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88CF8D2A5C5993007D3239 /* ThirdViewController.swift */; };
@@ -20,7 +19,6 @@
 		1A88CF9F2A5C5FD5007D3239 /* ThirdCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88CF9D2A5C5FD5007D3239 /* ThirdCoordinator.swift */; };
 		1A88CFA22A5C62F1007D3239 /* SecondViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A88CF982A5C5D0B007D3239 /* SecondViewController.xib */; };
 		1A88CFA32A5C62F3007D3239 /* ThirdViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A88CF9E2A5C5FD5007D3239 /* ThirdViewController.xib */; };
-		1A9D43342A4D8BDA00D5F19C /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 1A9D43332A4D8BDA00D5F19C /* ArgumentParser */; };
 		1A9D43362A4DF9C900D5F19C /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D43352A4DF9C900D5F19C /* Logger.swift */; };
 		1A9D43382A4DF9FD00D5F19C /* FirstViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D43372A4DF9FD00D5F19C /* FirstViewModel.swift */; };
 		1A9D433A2A4DFA0A00D5F19C /* SecondViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D43392A4DFA0A00D5F19C /* SecondViewModel.swift */; };
@@ -63,8 +61,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1A15624C2A4E055900F177DD /* Resolver in Frameworks */,
-				1A9D43342A4D8BDA00D5F19C /* ArgumentParser in Frameworks */,
 				1A15624A2A4E055900F177DD /* Macros in Frameworks */,
 				1A15624E2A4E055900F177DD /* Analyser in Frameworks */,
 			);
@@ -167,9 +163,7 @@
 			);
 			name = FyperTestApp;
 			packageProductDependencies = (
-				1A9D43332A4D8BDA00D5F19C /* ArgumentParser */,
 				1A1562492A4E055900F177DD /* Macros */,
-				1A15624B2A4E055900F177DD /* Resolver */,
 				1A15624D2A4E055900F177DD /* Analyser */,
 			);
 			productName = FyperTestApp;
@@ -202,7 +196,6 @@
 			mainGroup = 1ACC96D62A39CDEC00CEA6CC;
 			packageReferences = (
 				1A3207D62A3B3E870039AAD5 /* XCRemoteSwiftPackageReference "swift-system" */,
-				1A9D43322A4D8BDA00D5F19C /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
 				1A1562482A4E055900F177DD /* XCLocalSwiftPackageReference "../Fyper" */,
 			);
 			productRefGroup = 1ACC96E02A39CDEC00CEA6CC /* Products */;
@@ -485,24 +478,12 @@
 				minimumVersion = 1.2.1;
 			};
 		};
-		1A9D43322A4D8BDA00D5F19C /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-argument-parser.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.2.2;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		1A1562492A4E055900F177DD /* Macros */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Macros;
-		};
-		1A15624B2A4E055900F177DD /* Resolver */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Resolver;
 		};
 		1A15624D2A4E055900F177DD /* Analyser */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -512,11 +493,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1A1562482A4E055900F177DD /* XCLocalSwiftPackageReference "../Fyper" */;
 			productName = "plugin:BuildPlugin";
-		};
-		1A9D43332A4D8BDA00D5F19C /* ArgumentParser */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1A9D43322A4D8BDA00D5F19C /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
-			productName = ArgumentParser;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
