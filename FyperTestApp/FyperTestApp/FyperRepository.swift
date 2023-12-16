@@ -14,8 +14,8 @@ protocol FyperRepositoryProtocol {
 
 @Singleton(exposeAs: FyperRepositoryProtocol)
 final class FyperRepository: FyperRepositoryProtocol {
-
-	init() {
-		
-	}
+    
+    init() {
+        
+    }
 }

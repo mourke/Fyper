@@ -13,5 +13,4 @@ public enum Constants {
 	public static let ExposeAs = "exposeAs"
 	public static let Scope = "scope"
     public static let DependencyIgnored = "DependencyIgnored"
-	public static let Copyable = "Copyable"
 }

@@ -14,7 +14,7 @@ final class MacrosTests: XCTestCase {
         assertMacroExpansion(
             """
 			@Singleton(exposeAs: MyProtocol)
-            struct MyStruct: ~Copyable {
+            final class MyStruct {
                 init(logger: Logger, tracker: Tracker, id: String) {
                     self.logger = logger
                     self.tracker = tracker

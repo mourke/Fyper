@@ -81,35 +81,35 @@ struct Generator {
 		return containerFile
     }
 
-	private func buildMembers(dependencies: [Declaration]) -> MemberDeclListSyntax {
+    private func buildMembers(dependencies: [Declaration]) -> MemberBlockItemListSyntax {
 		logger.log("Building \(dependencies.count) members...", kind: .debug)
 
-		return MemberDeclListSyntax {
+        return MemberBlockItemListSyntax {
 			for dependency in dependencies {
 				VariableDeclSyntax(
-					modifiers: ModifierListSyntax(arrayLiteral: DeclModifierSyntax(name: .keyword(.private))),
+                    modifiers: DeclModifierListSyntax(arrayLiteral: DeclModifierSyntax(name: .keyword(.private))),
 					.let,
 					name: IdentifierPatternSyntax(identifier: .identifier(dependency.variableName)).cast(PatternSyntax.self),
-					type: .init(type: SimpleTypeIdentifierSyntax(name: .identifier(dependency.variableType)))
+                    type: .init(type: IdentifierTypeSyntax(name: .identifier(dependency.variableType)))
 				)
 			}
 		}
 	}
 
-	private func buildSingletons(_ singletons: [Component]) -> MemberDeclListSyntax {
+    private func buildSingletons(_ singletons: [Component]) -> MemberBlockItemListSyntax {
 		logger.log("Building \(singletons.count) singletons...", kind: .debug)
 
-		return MemberDeclListSyntax {
+        return MemberBlockItemListSyntax {
 			for singleton in singletons {
 				VariableDeclSyntax(
 					modifiers: .init(arrayLiteral: .init(name: .keyword(.private)), .init(name: .keyword(.lazy))),
 					.var,
 					name: .init(IdentifierPatternSyntax(identifier: .identifier(singleton.typename.lowercasingFirst))),
-					type: TypeAnnotationSyntax(type: SimpleTypeIdentifierSyntax(name: .identifier( singleton.typename))),
+                    type: TypeAnnotationSyntax(type: IdentifierTypeSyntax(name: .identifier( singleton.exposedAs))),
 					initializer: .init(value: FunctionCallExprSyntax(
-						calledExpression: IdentifierExprSyntax(identifier: .identifier("build\(singleton.typename)")),
+                        calledExpression: DeclReferenceExprSyntax(baseName: .identifier("build\(singleton.typename)")),
 						leftParen: .leftParenToken(),
-						argumentList: [],
+						arguments: [],
 						rightParen: .rightParenToken()
 					))
 				)
@@ -123,13 +123,13 @@ struct Generator {
 			for dependency in dependencies {
 				FunctionParameterSyntax(
 					firstName: .identifier(dependency.variableName),
-					type: SimpleTypeIdentifierSyntax(name: .identifier(dependency.variableType))
+                    type: IdentifierTypeSyntax(name: .identifier(dependency.variableType))
 				)
 			}
 		}
 		return InitializerDeclSyntax(
-			modifiers: ModifierListSyntax(arrayLiteral: DeclModifierSyntax(name: .keyword(.public))),
-			signature: .init(input: .init(parameterList: parameterList))
+            modifiers: DeclModifierListSyntax(arrayLiteral: DeclModifierSyntax(name: .keyword(.public))),
+            signature: .init(parameterClause: .init(parameters: parameterList))
 		) {
 			for dependency in dependencies {
 				let name = dependency.variableName
@@ -147,44 +147,44 @@ struct Generator {
 
 		return components.map { component in
 			FunctionDeclSyntax(
-				identifier: .identifier("build\(component.typename)"),
-				signature: .init(input: .init(parameterListBuilder: {
+				name: .identifier("build\(component.typename)"),
+				signature: .init(parameterClause: .init(parametersBuilder: {
 					for parameter in component.parameters {
 						FunctionParameterSyntax(
 							firstName: .identifier(parameter.variableName),
-							type: SimpleTypeIdentifierSyntax(name: .identifier(parameter.variableType))
+                            type: IdentifierTypeSyntax(name: .identifier(parameter.variableType))
 						)
 					}
-				}), output: .init(returnType: builderReturnType(for: component))),
+				}), returnClause: .init(type: builderReturnType(for: component))),
 				bodyBuilder: {
 					FunctionCallExprSyntax(
-						calledExpression: IdentifierExprSyntax(identifier: .identifier(component.typename)),
+                        calledExpression: DeclReferenceExprSyntax(baseName: .identifier(component.typename)),
 						leftParen: .leftParenToken(),
 						rightParen: .rightParenToken()
 					) {
 						for argument in component.arguments {
 							if argument.declaration.variableType == containerTypename {
-								TupleExprElementSyntax(
+                                LabeledExprSyntax(
 									label: argument.declaration.variableName,
-									expression: IdentifierExprSyntax(identifier: .keyword(.self))
+                                    expression: DeclReferenceExprSyntax(baseName: .keyword(.self))
 								)
 							} else if argument.type != .parameter && !singletonVariableNames.contains(argument.declaration.variableName) && !externalDependencyVariableNames.contains(argument.declaration.variableName) 
 							{
 								// @mbourke: If it's not a param, singleton or external dependency, call
 								// the build function directly
-								TupleExprElementSyntax(
+                                LabeledExprSyntax(
 									label: argument.declaration.variableName,
 									expression: FunctionCallExprSyntax(
-										calledExpression: IdentifierExprSyntax(identifier: .identifier("build\(argument.declaration.variableType)")),
+                                        calledExpression: DeclReferenceExprSyntax(baseName: .identifier("build\(argument.declaration.variableType)")),
 										leftParen: .leftParenToken(),
-										argumentList: [], 
+										arguments: [],
 										rightParen: .rightParenToken()
 									)
 								)
 							} else {
-								TupleExprElementSyntax(
+                                LabeledExprSyntax(
 									label: argument.declaration.variableName,
-									expression: IdentifierExprSyntax(identifier: .identifier(argument.declaration.variableName))
+                                    expression: DeclReferenceExprSyntax(baseName: .identifier(argument.declaration.variableName))
 								)
 							}
 						}
@@ -196,9 +196,9 @@ struct Generator {
 
 	private func builderReturnType(for component: Component) -> TypeSyntaxProtocol {
 		if component.isExposedAsProtocol {
-			return ConstrainedSugarTypeSyntax(someOrAnySpecifier: .keyword(.some), baseType: SimpleTypeIdentifierSyntax(name: .identifier(component.exposedAs)))
+            return SomeOrAnyTypeSyntax(someOrAnySpecifier: .keyword(.some), constraint: IdentifierTypeSyntax(name: .identifier(component.exposedAs)))
 		} else {
-			return SimpleTypeIdentifierSyntax(name: .identifier(component.exposedAs))
+            return IdentifierTypeSyntax(name: .identifier(component.exposedAs))
 		}
 	}
 }

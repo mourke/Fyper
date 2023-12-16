@@ -14,6 +14,6 @@ public protocol LoggerProtocol {
 final class Logger: LoggerProtocol {
 
     func log() {
-        print("It works!")
+        print("It logs!")
     }
 }

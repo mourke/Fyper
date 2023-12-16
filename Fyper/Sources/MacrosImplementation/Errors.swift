@@ -35,9 +35,9 @@ enum SyntaxError: DiagnosticMessage {
 		case let .onlyDataStructures(macroName):
 			return "'@\(macroName)' may only be applied to classes, structs or actors."
 		case .onlyOneMacro:
-			return "@\(Constants.Reusable) and @\(Constants.Singleton) cannot both be applied to the same declaration."
+			return "'@\(Constants.Reusable)' and '@\(Constants.Singleton)' cannot both be applied to the same declaration."
 		case .valueTypeSingleton:
-			return "@\(Constants.Singleton) cannot be applied to stack-allocated data structures (Swift value types)."
+			return "'@\(Constants.Singleton)' cannot be applied to value types."
 		case let .mustConformToExposedAs(typeName, protocolName):
 			return "'\(typeName)' does not conform to protocol '\(protocolName)' at declaration site."
 		}

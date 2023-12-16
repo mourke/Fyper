@@ -11,9 +11,9 @@ import SwiftSyntax
 public protocol DataStructureDeclSyntaxProtocol: SyntaxProtocol {
     var identifier: TokenSyntax { get }
     var id: SyntaxIdentifier { get }
-    var memberBlock: MemberDeclBlockSyntax { get }
-	var attributes: AttributeListSyntax? { get }
-	var inheritanceClause: TypeInheritanceClauseSyntax? { get }
+    var memberBlock: MemberBlockSyntax { get }
+	var attributes: AttributeListSyntax { get }
+    var inheritanceClause: InheritanceClauseSyntax? { get }
 }
 
 extension ClassDeclSyntax: DataStructureDeclSyntaxProtocol { }

@@ -21,12 +21,15 @@ let package = Package(
             targets: ["BuildPlugin"]
         ),
     ], dependencies: [
-        .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0-swift-5.9-DEVELOPMENT-SNAPSHOT-2023-04-25-b"),
-        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.2"),
+        .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.2"),
+        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.3.0"),
     ],
     targets: [
         // Macro implementation that performs the source transformation of a macro.
-		.target(name: "Shared", dependencies: [.product(name: "SwiftSyntax", package: "swift-syntax")]),
+		.target(name: "Shared", dependencies: [
+            .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+            .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
+        ]),
         .macro(
             name: "MacrosImplementation",
             dependencies: [
@@ -40,6 +43,7 @@ let package = Package(
             dependencies: [
                 .target(name: "MacrosImplementation"),
                 .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
+                .target(name: "Shared")
             ]
         ),
         .plugin(
@@ -58,6 +62,9 @@ let package = Package(
         ),
 
         // Library that exposes a macro as part of its API, which is used in client programs.
-        .target(name: "Macros", dependencies: ["MacrosImplementation", "Shared"]),
+        .target(name: "Macros", dependencies: [
+            .target(name: "MacrosImplementation"),
+            .target(name: "Shared")
+        ]),
     ]
 )

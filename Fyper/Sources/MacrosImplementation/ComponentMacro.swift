@@ -14,7 +14,7 @@ public struct ComponentMacro: MemberMacro {
 		providingMembersOf declaration: some DeclGroupSyntax,
         in context: some MacroExpansionContext
     ) throws -> [DeclSyntax] {
-		let macroName = node.attributeName.cast(SimpleTypeIdentifierSyntax.self).name.text
+        let macroName = node.attributeName.cast(IdentifierTypeSyntax.self).name.text
 
 		guard
 			declaration.is(ClassDeclSyntax.self) ||
@@ -31,14 +31,14 @@ public struct ComponentMacro: MemberMacro {
 
 		let dataStructure: DataStructureDeclSyntaxProtocol = (declaration.as(ClassDeclSyntax.self) ?? declaration.as(StructDeclSyntax.self)) ?? declaration.cast(ActorDeclSyntax.self)
 
-		let macros = declaration.attributes?
-			.compactMap({ element -> SimpleTypeIdentifierSyntax? in
+		let macros = declaration.attributes
+            .compactMap({ element -> IdentifierTypeSyntax? in
 				guard case .attribute(let attribute) = element else { return nil }
-				return attribute.attributeName.as(SimpleTypeIdentifierSyntax.self)
+                return attribute.attributeName.as(IdentifierTypeSyntax.self)
 			})
 			.filter({ $0.name.text == Constants.Reusable || $0.name.text == Constants.Singleton })
 
-		if let macros, macros.count > 1 {
+		if macros.count > 1 {
 			let diagnostic = Diagnostic(
 				node: node._syntaxNode,
 				message: SyntaxError.onlyOneMacro
@@ -47,31 +47,34 @@ public struct ComponentMacro: MemberMacro {
 			return []
 		}
 
-		if let argument = node.argument,
-		   case .argumentList(let argList) = argument,
-		   let exposedAs = argList.first(where: { $0.label?.text == Constants.ExposeAs }),
-		   let protocolName = exposedAs.expression.as(IdentifierExprSyntax.self)?.identifier.text,
-		   let inheritanceClause = dataStructure.inheritanceClause
+        if let arguments = node.arguments?.cast(LabeledExprListSyntax.self),
+		   let exposedAs = arguments.first(where: { $0.label?.text == Constants.ExposeAs }),
+           let protocolName = exposedAs.expression.as(DeclReferenceExprSyntax.self)?.baseName.text
 		{
-			let conformsToExposedAs = inheritanceClause.inheritedTypeCollection
-				.compactMap({ $0.typeName.cast(SimpleTypeIdentifierSyntax.self) })
-				.contains(where: { $0.name.text == protocolName })
+            let conformsToExposedAs = dataStructure.inheritanceClause?.inheritedTypes
+                .compactMap({ $0.type.as(IdentifierTypeSyntax.self) })
+				.contains(where: { $0.name.text == protocolName }) ?? false
 
 			if !conformsToExposedAs {
-				let newInheritanceClause = TypeInheritanceClauseSyntax {
-					let protocolType = SimpleTypeIdentifierSyntax(name: .identifier(protocolName))
-					for inheritance in inheritanceClause.inheritedTypeCollection {
-						inheritance
-					}
-					InheritedTypeSyntax(typeName: protocolType)
+                let newInheritanceClause = InheritanceClauseSyntax {
+                    let protocolType = IdentifierTypeSyntax(name: .identifier(protocolName))
+                    if let inheritedTypes = dataStructure.inheritanceClause?.inheritedTypes {
+                        for inheritance in inheritedTypes {
+                            inheritance
+                        }
+                    }
+                    InheritedTypeSyntax(type: protocolType)
 				}
 
 				let addProtocolConformance = FixIt(
 					message: CustomFixItMessage("Add conformance to '\(protocolName)'"),
 					changes: [
 						.replace(
-							oldNode: inheritanceClause._syntaxNode,
-							newNode: newInheritanceClause._syntaxNode
+							oldNode: dataStructure._syntaxNode,
+                            newNode: replacingInheritanceClause(
+                                of: dataStructure,
+                                newClause: newInheritanceClause
+                            )
 						)
 					]
 				)
@@ -90,45 +93,21 @@ public struct ComponentMacro: MemberMacro {
 			}
 		}
 
-		if macroName == Constants.Singleton,
-		   let structDecl = declaration.as(StructDeclSyntax.self),
-		   !isNonCopyableStruct(structDecl)
-		{
-			let structName = structDecl.identifier.description
+		if macroName == Constants.Singleton, let structDecl = declaration.as(StructDeclSyntax.self) {
+            let structName = structDecl.name.description
 			let becomeClass = FixIt(
 				message: CustomFixItMessage("Convert '\(structName)' to a class"),
 				changes: [
 					.replace(
-						oldNode: structDecl._syntaxNode,
-						newNode: structDecl.with(\.structKeyword, .keyword(.class))._syntaxNode
-					)
-				]
-			)
-			let inheritanceClause = TypeInheritanceClauseSyntax {
-				let nonCopyable = SuppressedTypeSyntax(
-					withoutTilde: .prefixOperator("~"),
-					patternType: SimpleTypeIdentifierSyntax(name: .identifier(Constants.Copyable))
-				)
-				InheritedTypeSyntax(typeName: nonCopyable)
-				if let inheritanceClause = structDecl.inheritanceClause {
-					for inheritance in inheritanceClause.inheritedTypeCollection {
-						inheritance
-					}
-				}
-			}
-			let addNonCopyable = FixIt(
-				message: CustomFixItMessage("Mark '\(structName)' as non-copyable"),
-				changes: [
-					.replace(
-						oldNode: structDecl._syntaxNode,
-						newNode: structDecl.with(\.inheritanceClause, inheritanceClause)._syntaxNode
+                        oldNode: structDecl.structKeyword._syntaxNode,
+                        newNode: structDecl.structKeyword.with(\.tokenKind, .keyword(.class))._syntaxNode
 					)
 				]
 			)
 			let diagnostic = Diagnostic(
 				node: node._syntaxNode,
 				message: SyntaxError.valueTypeSingleton,
-				fixIts: [becomeClass, addNonCopyable]
+				fixIts: [becomeClass]
 			)
 			context.diagnose(diagnostic)
 
@@ -137,20 +116,19 @@ public struct ComponentMacro: MemberMacro {
 
 		return []
     }
-
-	private static func isNonCopyableStruct(_ structDecl: StructDeclSyntax) -> Bool {
-		guard let inheritanceClause = structDecl.inheritanceClause else {
-			return false
-		}
-		return inheritanceClause.inheritedTypeCollection
-			.compactMap({ $0.typeName.as(SuppressedTypeSyntax.self) })
-			.contains(where: {
-				guard let type = $0.patternType.as(SimpleTypeIdentifierSyntax.self) else {
-					return false
-				}
-				return type.name.text == Constants.Copyable && $0.withoutTilde == .prefixOperator("~")
-			})
-	}
+    
+    private static func replacingInheritanceClause(
+        of declaration: DataStructureDeclSyntaxProtocol,
+        newClause newInheritanceClause: InheritanceClauseSyntax
+    ) -> Syntax {
+        if let structDecl = declaration.as(StructDeclSyntax.self) {
+            return structDecl.with(\.inheritanceClause, newInheritanceClause).formatted()._syntaxNode
+        } else if let classDecl = declaration.as(ClassDeclSyntax.self) {
+            return classDecl.with(\.inheritanceClause, newInheritanceClause).formatted()._syntaxNode
+        } else {
+            return declaration.cast(ActorDeclSyntax.self).with(\.inheritanceClause, newInheritanceClause).formatted()._syntaxNode
+        }
+    }
 }
 
 @main

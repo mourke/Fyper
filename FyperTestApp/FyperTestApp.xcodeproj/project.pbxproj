@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1A15624A2A4E055900F177DD /* Macros in Frameworks */ = {isa = PBXBuildFile; productRef = 1A1562492A4E055900F177DD /* Macros */; };
-		1A15624E2A4E055900F177DD /* Analyser in Frameworks */ = {isa = PBXBuildFile; productRef = 1A15624D2A4E055900F177DD /* Analyser */; };
 		1A88CF8B2A5C594D007D3239 /* FirstCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88CF8A2A5C594D007D3239 /* FirstCoordinator.swift */; };
 		1A88CF8E2A5C5993007D3239 /* ThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88CF8D2A5C5993007D3239 /* ThirdViewController.swift */; };
 		1A88CF8F2A5C5993007D3239 /* ThirdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88CF8C2A5C5993007D3239 /* ThirdViewModel.swift */; };
@@ -62,7 +61,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A15624A2A4E055900F177DD /* Macros in Frameworks */,
-				1A15624E2A4E055900F177DD /* Analyser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,12 +157,12 @@
 			buildRules = (
 			);
 			dependencies = (
+				BDAF7A952B2DED7100DA4B55 /* PBXTargetDependency */,
 				1A1562502A4E056D00F177DD /* PBXTargetDependency */,
 			);
 			name = FyperTestApp;
 			packageProductDependencies = (
 				1A1562492A4E055900F177DD /* Macros */,
-				1A15624D2A4E055900F177DD /* Analyser */,
 			);
 			productName = FyperTestApp;
 			productReference = 1ACC96DF2A39CDEC00CEA6CC /* FyperTestApp.app */;
@@ -251,6 +249,10 @@
 		1A1562502A4E056D00F177DD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 1A15624F2A4E056D00F177DD /* BuildPlugin */;
+		};
+		BDAF7A952B2DED7100DA4B55 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = BDAF7A942B2DED7100DA4B55 /* Macros */;
 		};
 /* End PBXTargetDependency section */
 
@@ -485,14 +487,15 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Macros;
 		};
-		1A15624D2A4E055900F177DD /* Analyser */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Analyser;
-		};
 		1A15624F2A4E056D00F177DD /* BuildPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1A1562482A4E055900F177DD /* XCLocalSwiftPackageReference "../Fyper" */;
 			productName = "plugin:BuildPlugin";
+		};
+		BDAF7A942B2DED7100DA4B55 /* Macros */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A1562482A4E055900F177DD /* XCLocalSwiftPackageReference "../Fyper" */;
+			productName = Macros;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
