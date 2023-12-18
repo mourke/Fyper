@@ -19,7 +19,11 @@ final class SecondViewModel: SecondViewModelProtocol {
     private let tracker: TrackerProtocol
     private let coordinator: SecondCoordinatorProtocol
 
-    init(logger: LoggerProtocol, tracker: TrackerProtocol, @DependencyIgnored coordinator: SecondCoordinatorProtocol) {
+    init(
+		logger: LoggerProtocol,
+		tracker: TrackerProtocol,
+		@DependencyIgnored coordinator: SecondCoordinatorProtocol
+	) {
         self.logger = logger
         self.tracker = tracker
         self.coordinator = coordinator

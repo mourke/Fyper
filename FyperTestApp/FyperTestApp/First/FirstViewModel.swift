@@ -18,7 +18,10 @@ final class FirstViewModel: FirstViewModelProtocol {
     private let logger: LoggerProtocol
     private let coordinator: FirstCoordinatorProtocol
 
-    init(logger: LoggerProtocol, @DependencyIgnored coordinator: FirstCoordinatorProtocol) {
+    init(
+		logger: LoggerProtocol,
+		@DependencyIgnored coordinator: FirstCoordinatorProtocol
+	) {
         self.logger = logger
         self.coordinator = coordinator
     }

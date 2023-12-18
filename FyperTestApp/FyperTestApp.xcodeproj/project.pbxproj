@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1A15624A2A4E055900F177DD /* Macros in Frameworks */ = {isa = PBXBuildFile; productRef = 1A1562492A4E055900F177DD /* Macros */; };
+		1A224FB92B3055D500393835 /* FlowCoordinatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A224FB82B3055D500393835 /* FlowCoordinatorProtocol.swift */; };
 		1A88CF8B2A5C594D007D3239 /* FirstCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88CF8A2A5C594D007D3239 /* FirstCoordinator.swift */; };
 		1A88CF8E2A5C5993007D3239 /* ThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88CF8D2A5C5993007D3239 /* ThirdViewController.swift */; };
 		1A88CF8F2A5C5993007D3239 /* ThirdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88CF8C2A5C5993007D3239 /* ThirdViewModel.swift */; };
@@ -31,6 +32,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1A224FB82B3055D500393835 /* FlowCoordinatorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowCoordinatorProtocol.swift; sourceTree = "<group>"; };
 		1A88CF8A2A5C594D007D3239 /* FirstCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstCoordinator.swift; sourceTree = "<group>"; };
 		1A88CF8C2A5C5993007D3239 /* ThirdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdViewModel.swift; sourceTree = "<group>"; };
 		1A88CF8D2A5C5993007D3239 /* ThirdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdViewController.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 				1A9D43352A4DF9C900D5F19C /* Logger.swift */,
 				1A88CF912A5C59E4007D3239 /* Tracker.swift */,
 				1A88CF9B2A5C5F26007D3239 /* WebViewAuthenticator.swift */,
+				1A224FB82B3055D500393835 /* FlowCoordinatorProtocol.swift */,
 			);
 			path = Dependencies;
 			sourceTree = "<group>";
@@ -231,6 +234,7 @@
 				1A88CF9C2A5C5F26007D3239 /* WebViewAuthenticator.swift in Sources */,
 				1A88CF9F2A5C5FD5007D3239 /* ThirdCoordinator.swift in Sources */,
 				1A9D43382A4DF9FD00D5F19C /* FirstViewModel.swift in Sources */,
+				1A224FB92B3055D500393835 /* FlowCoordinatorProtocol.swift in Sources */,
 				1A9D433A2A4DFA0A00D5F19C /* SecondViewModel.swift in Sources */,
 				1A88CF8F2A5C5993007D3239 /* ThirdViewModel.swift in Sources */,
 				1ACC96E72A39CDEC00CEA6CC /* FirstViewController.swift in Sources */,

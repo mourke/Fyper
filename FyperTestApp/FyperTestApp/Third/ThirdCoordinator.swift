@@ -6,23 +6,29 @@
 //
 
 import UIKit
+import Macros
 
-protocol ThirdCoordinatorProtocol {
-
+protocol ThirdCoordinatorProtocol: FlowCoordinatorProtocol {
 }
 
-final class ThirdCoordinator: ThirdCoordinatorProtocol {
+@Reusable(exposeAs: FlowCoordinatorProtocol)
+final class ThirdCoordinator: ThirdCoordinatorProtocol, FlowCoordinatorProtocol {
 
-    private weak var presentingViewController: UIViewController?
+	private let container: FyperTestAppContainer
+    private (set) unowned var presentingViewController: UIViewController
 
-    init(presentingViewController: UIViewController) {
+	init(
+		container: FyperTestAppContainer,
+		@DependencyIgnored presentingViewController: UIViewController
+	) {
+		self.container = container
         self.presentingViewController = presentingViewController
     }
 
     func startFlow() {
-//        let viewModel = ThirdViewModel(coordinator: self)
-//        let viewController = ThirdViewController(viewModel: viewModel)
-//
-//        presentingViewController?.present(viewController, animated: true)
+		let viewModel = container.buildThirdViewModel(coordinator: self)
+        let viewController = ThirdViewController(viewModel: viewModel)
+
+        presentingViewController.present(viewController, animated: true)
     }
 }

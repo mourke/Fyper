@@ -18,12 +18,16 @@ struct Analyser {
 	/// Parsed file structures obtained from the *Parser* stage.
 	let fileStructures: [FileStructure]
 
-	func analyse() -> [Component] {
+	func analyse() -> Analysis {
 		var components: [Component] = []
+		var allImports: [ImportPathComponentListSyntax] = []
 
-		for (filePath, syntaxStructure) in fileStructures {
+		for (filePath, abstractSyntaxTree) in fileStructures {
+			// @mbourke: For simplicity, import everything every file imports to the generated file
+			// so there can be no missing typenames.
+			let imports = findImportDeclarations(syntax: abstractSyntaxTree)
 			logger.log("Looking for Components in \(filePath)...", kind: .debug)
-			let componentDeclarations = findComponentDeclarations(syntax: syntaxStructure)
+			let componentDeclarations = findComponentDeclarations(syntax: abstractSyntaxTree)
 			logger.log("Found \(componentDeclarations.count) Component(s).", kind: .debug)
 
 			for (macro, dataStructure) in componentDeclarations {
@@ -43,9 +47,34 @@ struct Analyser {
 					components.append(component)
 				}
 			}
+
+			for importStatement in imports {
+				let cleanedStatement = ImportPathComponentListSyntax {
+					for pathComponent in importStatement.path {
+						ImportPathComponentSyntax(name: pathComponent.name)
+					}
+				}
+
+				if !allImports.contains(where: {$0.description.lowercased() == cleanedStatement.description.lowercased()}) {
+					allImports.append(cleanedStatement)
+				}
+			}
 		}
 
-		return components
+		return Analysis(
+			components: components,
+			imports: allImports.sorted(by: {$0.description.lowercased() < $1.description.lowercased()})
+		)
+	}
+
+	private func findImportDeclarations(syntax: SyntaxProtocol) -> [ImportDeclSyntax] {
+		let children = syntax.children(viewMode: .fixedUp)
+
+		guard let importDecl = syntax.as(ImportDeclSyntax.self) else {
+			return children.flatMap(findImportDeclarations(syntax:))
+		}
+
+		return [importDecl]
 	}
 
 	// MARK: - Searching for Components
@@ -57,7 +86,7 @@ struct Analyser {
 				syntax.kind == .structDecl ||
 				syntax.kind == .actorDecl
 		else {
-			return children.flatMap { findComponentDeclarations(syntax: $0) }
+			return children.flatMap(findComponentDeclarations(syntax:))
 		}
 
 		let dataStructure: DataStructureDeclSyntaxProtocol = (syntax.as(ClassDeclSyntax.self) ?? syntax.as(StructDeclSyntax.self)) ?? syntax.cast(ActorDeclSyntax.self)

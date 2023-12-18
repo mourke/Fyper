@@ -17,8 +17,8 @@ struct Generator {
 	/// The name of the Xcode target whose Container is currently being generated. This is used to generate the name of the Container class.
 	let targetName: String
 
-    /// The Components that should generated inside the Container, obtained from the *Analyser* stage.
-    let components: [Component]
+    /// The analysis of the target source files.
+	let analysis: Analysis
 
     ///
     /// Generates a file of the form 'TargetName+Container.swift' that contains all the injectable components.
@@ -26,6 +26,8 @@ struct Generator {
 	/// - Throws:   Exception if the file being generated contains malformed swift.
     ///
     func generate() throws -> String {
+		let components = analysis.components
+
 		let containerTypename = "\(targetName)Container"
 		logger.log("Generating \(containerTypename)...", kind: .debug)
 
@@ -55,27 +57,35 @@ struct Generator {
 
 		logger.log("\(singletons.count) singletons found.", kind: .debug)
 
-		let classDecl = try ClassDeclSyntax("public final class \(raw: containerTypename)") {
+		let generatedFileSyntax = try SourceFileSyntax {
+			for importStatement in analysis.imports {
+				ImportDeclSyntax(path: .init(itemsBuilder: {
+					importStatement
+				}))
+			}
 
-			buildMembers(dependencies: externalDependencies)
+			try ClassDeclSyntax("public final class \(raw: containerTypename)") {
 
-			buildSingletons(singletons)
+				buildMembers(dependencies: externalDependencies)
 
-			buildInitializer(dependencies: externalDependencies)
+				buildSingletons(singletons)
 
-			let builders = buildComponentBuilders(
-				singletonVariableNames: singletons.map(\.typename).map(\.lowercasingFirst),
-				externalDependencyVariableNames: externalDependencies.map(\.variableName),
-				containerTypename: containerTypename
-			)
+				buildInitializer(dependencies: externalDependencies)
 
-			for function in builders {
-				function
+				let builders = buildComponentBuilders(
+					singletonVariableNames: singletons.map(\.typename).map(\.lowercasingFirst),
+					externalDependencyVariableNames: externalDependencies.map(\.variableName),
+					containerTypename: containerTypename
+				)
+
+				for function in builders {
+					function
+				}
 			}
 		}
 
 		var containerFile = ""
-		classDecl.formatted().write(to: &containerFile)
+		generatedFileSyntax.formatted().write(to: &containerFile)
 		logger.log("Successfully generated! \n \(containerFile)", kind: .debug)
 
 		return containerFile
@@ -143,9 +153,9 @@ struct Generator {
 		externalDependencyVariableNames: [String],
 		containerTypename: String
 	) -> [FunctionDeclSyntax] {
-		logger.log("Building \(components.count) builders...", kind: .debug)
+		logger.log("Building \(analysis.components.count) builders...", kind: .debug)
 
-		return components.map { component in
+		return analysis.components.map { component in
 			FunctionDeclSyntax(
 				name: .identifier("build\(component.typename)"),
 				signature: .init(parameterClause: .init(parametersBuilder: {

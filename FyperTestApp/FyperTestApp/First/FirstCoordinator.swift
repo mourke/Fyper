@@ -28,11 +28,13 @@ final class FirstCoordinator: FirstCoordinatorProtocol {
 	func instantiateRoot() -> UIViewController {
 		let viewModel = container.buildFirstViewModel(coordinator: self)
 		let viewController = FirstViewController(viewModel: viewModel)
+		rootViewController = viewController
 		return viewController
 	}
 
     func presentSecondViewController() {
-		let secondCoordinator = container.buildSecondCoordinator()
+		guard let rootViewController else { fatalError() }
+		let secondCoordinator = container.buildSecondCoordinator(presentingViewController: rootViewController)
         secondCoordinator.startFlow()
     }
 }
