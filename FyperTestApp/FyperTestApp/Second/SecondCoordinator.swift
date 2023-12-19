@@ -18,6 +18,7 @@ final class SecondCoordinator: SecondCoordinatorProtocol, FlowCoordinatorProtoco
 	private (set) unowned var presentingViewController: UIViewController
 	private let container: FyperTestAppContainer
 
+	@Inject
 	init(
 		container: FyperTestAppContainer,
 		@DependencyIgnored presentingViewController: UIViewController

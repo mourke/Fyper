@@ -32,13 +32,20 @@ struct Analyser {
 
 			for (macro, dataStructure) in componentDeclarations {
 				logger.log("Extracting metadata from \(dataStructure.identifier.text)...", kind: .debug)
-				let typename = dataStructure.identifier.text
-				let (exposedAs, isPublic, isSingleton) = extractMetadata(from: macro)
+				var type: TypeSyntaxProtocol = IdentifierTypeSyntax(name: dataStructure.identifier)
+				var (exposedAs, isPublic, isSingleton) = extractMetadata(from: macro)
 
 				for initializer in findInitializers(in: dataStructure) {
+					let isOptional = initializer.optionalMark?.tokenKind == .postfixQuestionMark
+
+					if isOptional {
+						type = OptionalTypeSyntax(wrappedType: type)
+						exposedAs = exposedAs.map({OptionalTypeSyntax(wrappedType: $0)})
+					}
+
 					let component = Component(
-						typename: typename,
-						exposedAs: exposedAs ?? typename,
+						type: type,
+						exposedAs: exposedAs ?? type,
 						arguments: separateParameterList(in: initializer),
 						isPublic: isPublic,
 						isSingleton: isSingleton
@@ -48,15 +55,19 @@ struct Analyser {
 				}
 			}
 
-			for importStatement in imports {
-				let cleanedStatement = ImportPathComponentListSyntax {
-					for pathComponent in importStatement.path {
-						ImportPathComponentSyntax(name: pathComponent.name)
+			// @mbourke: Only add imports if the data structures inside the file participate in
+			// dependency injection.
+			if !componentDeclarations.isEmpty {
+				for importStatement in imports {
+					let cleanedStatement = ImportPathComponentListSyntax {
+						for pathComponent in importStatement.path {
+							ImportPathComponentSyntax(name: pathComponent.name)
+						}
 					}
-				}
 
-				if !allImports.contains(where: {$0.description.lowercased() == cleanedStatement.description.lowercased()}) {
-					allImports.append(cleanedStatement)
+					if !allImports.contains(where: {$0.description.lowercased() == cleanedStatement.description.lowercased()}) {
+						allImports.append(cleanedStatement)
+					}
 				}
 			}
 		}
@@ -109,18 +120,18 @@ struct Analyser {
 		return isComponentMacro ? syntax : nil
     }
 
-	private func extractMetadata(from syntax: AttributeSyntax) -> (exposedAs: String?, isPublic: Bool, isSingleton: Bool) {
+	private func extractMetadata(from syntax: AttributeSyntax) -> (exposedAs: TypeSyntaxProtocol?, isPublic: Bool, isSingleton: Bool) {
         let attributeName = syntax.attributeName.cast(IdentifierTypeSyntax.self).name.text
 		let isSingleton = attributeName == Constants.Singleton
-		var exposedAs: String?
+		var exposedAs: IdentifierTypeSyntax?
 		var isPublic = false
 
         if case let .argumentList(arguments) = syntax.arguments {
 			for argument in arguments {
 				switch argument.label?.text {
 				case Constants.ExposeAs:
-                    let identifier = argument.expression.cast(DeclReferenceExprSyntax.self).baseName
-					exposedAs = identifier.text
+                    let identifier = argument.expression.as(DeclReferenceExprSyntax.self)?.baseName
+					exposedAs = identifier.map({IdentifierTypeSyntax(name: $0)}) // @mbourke: exposedAs will always be a simple type as inforced by the macro
 				case Constants.Scope:
                     let identifier = argument.expression.cast(MemberAccessExprSyntax.self).declName.baseName
 					isPublic = identifier.text == String(describing: ComponentScope.public)
@@ -149,15 +160,22 @@ struct Analyser {
         logger.log("Looking for initializers in \(typename)...", kind: .debug)
 
         let initializers: [InitializerDeclSyntax] = dataStructure.memberBlock.members.compactMap { child in
-            let declaration = child.decl
-            guard declaration.kind == .initializerDecl else {
-                return nil
-            }
+            guard let initialiser = child.decl.as(InitializerDeclSyntax.self) else { return nil }
 
-            let initialiser = declaration.cast(InitializerDeclSyntax.self)
+			let isInjectable = initialiser.attributes.contains { attribute in
+				guard case let .attribute(attributes) = attribute else { return false }
+				return attributes.attributeName.description == Constants.Inject
+			}
             logger.log("Found initializer in \(typename): \(initialiser.description)", kind: .debug)
 
-            return initialiser.detached // save memory by detaching
+			if isInjectable {
+				logger.log("Initialiser is injectable!", kind: .debug)
+				// @mbourke: Detaching will remove any parent nodes to save memory.
+				return initialiser.detached
+			}
+
+			logger.log("Initialiser not injectable. Ignoring...", kind: .debug)
+            return nil
         }
 
         return initializers
@@ -178,7 +196,8 @@ struct Analyser {
 	private func toDeclaration(from parameter: FunctionParameterSyntax) -> Declaration {
 		Declaration(
 			variableName: parameter.firstName.trimmed.text,
-            variableType: parameter.type.cast(IdentifierTypeSyntax.self).name.text
+			variableType: parameter.type.trimmed,
+			value: parameter.defaultValue?.value.trimmedDescription
 		)
 	}
 }

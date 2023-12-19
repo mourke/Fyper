@@ -18,6 +18,7 @@ final class FirstViewModel: FirstViewModelProtocol {
     private let logger: LoggerProtocol
     private let coordinator: FirstCoordinatorProtocol
 
+	@Inject
     init(
 		logger: LoggerProtocol,
 		@DependencyIgnored coordinator: FirstCoordinatorProtocol

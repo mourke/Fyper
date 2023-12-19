@@ -1,3 +1,10 @@
+//
+//  ComponentMacro.swift
+//  Fyper
+//
+//  Created by Mark Bourke on 19/12/2023.
+//
+
 import SwiftCompilerPlugin
 import SwiftSyntax
 import SwiftSyntaxBuilder
@@ -15,6 +22,9 @@ public struct ComponentMacro: MemberMacro {
         in context: some MacroExpansionContext
     ) throws -> [DeclSyntax] {
         let macroName = node.attributeName.cast(IdentifierTypeSyntax.self).name.text
+
+		// TODO: attaching reusable or singleton to Generic types is not supported. Must exposeAs non-generic protocol
+		// TODO: Every component should have at least 1 initialiser marked with @Inject
 
 		guard
 			declaration.is(ClassDeclSyntax.self) ||
@@ -129,11 +139,4 @@ public struct ComponentMacro: MemberMacro {
             return declaration.cast(ActorDeclSyntax.self).with(\.inheritanceClause, newInheritanceClause).formatted()._syntaxNode
         }
     }
-}
-
-@main
-struct FyperMacrosPlugin: CompilerPlugin {
-    let providingMacros: [Macro.Type] = [
-        ComponentMacro.self,
-    ]
 }

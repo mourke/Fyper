@@ -23,9 +23,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
 		let container = FyperTestAppContainer(
-			authenticator: webViewAuthenticator,
-			logger: logger,
-			tracker: tracker
+			loggerProtocol: logger,
+			trackerProtocol: tracker,
+			webViewAuthenticatorProtocol: webViewAuthenticator
 		)
 
         window = UIWindow(windowScene: windowScene)

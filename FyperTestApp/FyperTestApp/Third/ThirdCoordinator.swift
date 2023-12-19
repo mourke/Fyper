@@ -17,6 +17,7 @@ final class ThirdCoordinator: ThirdCoordinatorProtocol, FlowCoordinatorProtocol 
 	private let container: FyperTestAppContainer
     private (set) unowned var presentingViewController: UIViewController
 
+	@Inject
 	init(
 		container: FyperTestAppContainer,
 		@DependencyIgnored presentingViewController: UIViewController

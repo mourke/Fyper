@@ -8,7 +8,7 @@
 import Foundation
 import ArgumentParser
 
-// encantation: fyper generate [--targetName <target name> -o <output> --sourceFiles <source files>]
+// encantation: fyper generate [--target-name <target name> -o <output> --source-files <source files>]
 
 @main
 struct Fyper: ParsableCommand {
@@ -39,7 +39,6 @@ struct Fyper: ParsableCommand {
             do {
                 let files = try Parser(logger: logger, swiftFiles: sourceFiles).parse()
                 let analysis = Analyser(logger: logger, fileStructures: files).analyse()
-				// TODO: Add some caching here so we don't need to generate every time
 				let container = try Generator(logger: logger, targetName: targetName, analysis: analysis).generate()
 
 				let containerURL = URL(filePath: output)

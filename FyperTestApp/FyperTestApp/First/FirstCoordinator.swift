@@ -21,6 +21,7 @@ final class FirstCoordinator: FirstCoordinatorProtocol {
 
 	private let container: FyperTestAppContainer
 
+	@Inject
 	init(container: FyperTestAppContainer) {
 		self.container = container
 	}

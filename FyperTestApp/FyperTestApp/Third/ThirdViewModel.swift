@@ -20,6 +20,7 @@ final class ThirdViewModel: ThirdViewModelProtocol {
     private let authenticator: WebViewAuthenticatorProtocol
     private let coordinator: ThirdCoordinatorProtocol
 
+	@Inject
     init(
         tracker: TrackerProtocol,
         authenticator: WebViewAuthenticatorProtocol,

@@ -20,6 +20,15 @@ public macro Reusable(exposeAs: Any? = nil, scope: ComponentScope = .internal) =
 @attached(member)
 public macro Singleton(exposeAs: Any? = nil) = #externalMacro(module: "MacrosImplementation", type: "ComponentMacro")
 
+///
+///	Marks an initialiser as Injectable. Each data structure marked with `Singleton` or `Reusable` must also specify at least one initialiser
+///	as participating in dependency injection.
+///
+///	- Note: This macro is not able to check if its containing data structure is either a `Singleton` or a `Reusable`. This is a programmer error.
+///
+@attached(peer)
+public macro Inject() = #externalMacro(module: "MacrosImplementation", type: "InjectMacro")
+
 /// Marks initialiser parameter as not a dependency.
 @propertyWrapper public struct DependencyIgnored<Dependency> {
 

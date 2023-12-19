@@ -12,7 +12,7 @@ enum ArgumentType {
 }
 
 /// An argument is a variable that is passed to a function
-struct Argument: Equatable {
+struct Argument {
 
 	/// The declaration (name and type) of the argument
 	let declaration: Declaration
