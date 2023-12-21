@@ -172,6 +172,7 @@ struct Generator {
 		return analysis.components.map { component in
 			let componentSimpleType = getUnderlyingSimpleType(from: component.type)
 			return FunctionDeclSyntax(
+				modifiers: component.isPublic ? [DeclModifierSyntax(name: .keyword(.public))] : [],
 				name: .identifier("build\(componentSimpleType.name.text)"),
 				genericParameterClause: component.genericParameters,
 				signature: .init(parameterClause: .init(parametersBuilder: {
