@@ -23,9 +23,6 @@ public struct ComponentMacro: MemberMacro {
     ) throws -> [DeclSyntax] {
         let macroName = node.attributeName.cast(IdentifierTypeSyntax.self).name.text
 
-		// TODO: attaching reusable or singleton to Generic types is not supported. Must exposeAs non-generic protocol
-		// TODO: Every component should have at least 1 initialiser marked with @Inject
-
 		guard
 			declaration.is(ClassDeclSyntax.self) ||
 			declaration.is(StructDeclSyntax.self) ||
@@ -40,6 +37,51 @@ public struct ComponentMacro: MemberMacro {
 		}
 
 		let dataStructure: DataStructureDeclSyntaxProtocol = (declaration.as(ClassDeclSyntax.self) ?? declaration.as(StructDeclSyntax.self)) ?? declaration.cast(ActorDeclSyntax.self)
+
+		let initialisers: [InitializerDeclSyntax] = dataStructure.memberBlock.members.compactMap {
+			$0.decl.as(InitializerDeclSyntax.self)
+		}
+
+		let hasNoInjectableInitialisers = initialisers.filter { initialiser in
+			let isInjectable = initialiser.attributes.contains { attribute in
+				guard case let .attribute(attributes) = attribute else { return false }
+				return attributes.attributeName.description == Constants.Inject
+			}
+
+			return isInjectable
+		}.isEmpty
+
+		if hasNoInjectableInitialisers {
+			let fixIts = initialisers.map { initialiser in
+				let parameters = initialiser.signature.parameterClause.parameters
+					.map({ "\($0.firstName.text):" })
+					.joined()
+				let newAttributes = AttributeListSyntax {
+					AttributeSyntax(attributeName: IdentifierTypeSyntax(name: .identifier(Constants.Inject)))
+					for attribute in initialiser.attributes {
+						attribute
+					}
+				}
+				return FixIt(
+					message: CustomFixItMessage("Mark 'init(\(parameters))' with '@\(Constants.Inject)'"),
+					changes: [
+						.replace(
+							oldNode: initialiser._syntaxNode,
+							newNode: initialiser.with(\.attributes, newAttributes)._syntaxNode
+						)
+					]
+				)
+			}
+
+			let diagnostic = Diagnostic(
+				node: node._syntaxNode,
+				message: SyntaxError.mustHaveOneInjectableInit(typeName: dataStructure.identifier.text),
+				fixIts: fixIts
+			)
+			context.diagnose(diagnostic)
+
+			return []
+		}
 
 		let macros = declaration.attributes
             .compactMap({ element -> IdentifierTypeSyntax? in
@@ -57,52 +99,6 @@ public struct ComponentMacro: MemberMacro {
 			return []
 		}
 
-        if let arguments = node.arguments?.cast(LabeledExprListSyntax.self),
-		   let exposedAs = arguments.first(where: { $0.label?.text == Constants.ExposeAs }),
-           let protocolName = exposedAs.expression.as(DeclReferenceExprSyntax.self)?.baseName.text
-		{
-            let conformsToExposedAs = dataStructure.inheritanceClause?.inheritedTypes
-                .compactMap({ $0.type.as(IdentifierTypeSyntax.self) })
-				.contains(where: { $0.name.text == protocolName }) ?? false
-
-			if !conformsToExposedAs {
-                let newInheritanceClause = InheritanceClauseSyntax {
-                    let protocolType = IdentifierTypeSyntax(name: .identifier(protocolName))
-                    if let inheritedTypes = dataStructure.inheritanceClause?.inheritedTypes {
-                        for inheritance in inheritedTypes {
-                            inheritance
-                        }
-                    }
-                    InheritedTypeSyntax(type: protocolType)
-				}
-
-				let addProtocolConformance = FixIt(
-					message: CustomFixItMessage("Add conformance to '\(protocolName)'"),
-					changes: [
-						.replace(
-							oldNode: dataStructure._syntaxNode,
-                            newNode: replacingInheritanceClause(
-                                of: dataStructure,
-                                newClause: newInheritanceClause
-                            )
-						)
-					]
-				)
-
-				let diagnostic = Diagnostic(
-					node: declaration._syntaxNode,
-					message: SyntaxError.mustConformToExposedAs(
-						typeName: dataStructure.identifier.text,
-						protocolName: protocolName
-					),
-					fixIts: [addProtocolConformance]
-				)
-				context.diagnose(diagnostic)
-
-				return []
-			}
-		}
-
 		if macroName == Constants.Singleton, let structDecl = declaration.as(StructDeclSyntax.self) {
             let structName = structDecl.name.description
 			let becomeClass = FixIt(
@@ -117,7 +113,7 @@ public struct ComponentMacro: MemberMacro {
 			let diagnostic = Diagnostic(
 				node: node._syntaxNode,
 				message: SyntaxError.valueTypeSingleton,
-				fixIts: [becomeClass]
+				fixIt: becomeClass
 			)
 			context.diagnose(diagnostic)
 

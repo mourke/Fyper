@@ -14,6 +14,7 @@ public protocol DataStructureDeclSyntaxProtocol: SyntaxProtocol {
     var memberBlock: MemberBlockSyntax { get }
 	var attributes: AttributeListSyntax { get }
     var inheritanceClause: InheritanceClauseSyntax? { get }
+	var genericParameterClause: GenericParameterClauseSyntax? { get }
 }
 
 extension ClassDeclSyntax: DataStructureDeclSyntaxProtocol { }

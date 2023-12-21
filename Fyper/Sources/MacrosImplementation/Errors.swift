@@ -28,18 +28,27 @@ enum SyntaxError: DiagnosticMessage {
 	case onlyDataStructures(macroName: String)
 	case onlyOneMacro
 	case valueTypeSingleton
-	case mustConformToExposedAs(typeName: String, protocolName: String)
+	case mustHaveOneInjectableInit(typeName: String)
+	case onlyInitialisers
+	case noAsync
+	case noThrowing
 
 	var message: String {
 		switch self {
+		case .onlyInitialisers:
+			return "'@\(Constants.Inject)' may only be applied to initialiser declarations."
 		case let .onlyDataStructures(macroName):
 			return "'@\(macroName)' may only be applied to classes, structs or actors."
 		case .onlyOneMacro:
 			return "'@\(Constants.Reusable)' and '@\(Constants.Singleton)' cannot both be applied to the same declaration."
 		case .valueTypeSingleton:
 			return "'@\(Constants.Singleton)' cannot be applied to value types."
-		case let .mustConformToExposedAs(typeName, protocolName):
-			return "'\(typeName)' does not conform to protocol '\(protocolName)' at declaration site."
+		case let .mustHaveOneInjectableInit(typeName):
+			return "'\(typeName)' must have at least one initialiser marked as '@\(Constants.Inject)'."
+		case .noAsync:
+			return "'@\(Constants.Inject)' cannot be applied to async functions yet."
+		case .noThrowing:
+			return "'@\(Constants.Inject)' cannot be applied to throwing functions yet."
 		}
 	}
 

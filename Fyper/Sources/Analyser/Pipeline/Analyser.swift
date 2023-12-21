@@ -32,7 +32,21 @@ struct Analyser {
 
 			for (macro, dataStructure) in componentDeclarations {
 				logger.log("Extracting metadata from \(dataStructure.identifier.text)...", kind: .debug)
-				var type: TypeSyntaxProtocol = IdentifierTypeSyntax(name: dataStructure.identifier)
+
+				let genericArgumentClause: GenericArgumentClauseSyntax? = {
+					guard let parameterClause = dataStructure.genericParameterClause else { return nil }
+					let genericArguments = parameterClause.parameters.map({
+						GenericArgumentSyntax(argument: IdentifierTypeSyntax(name: $0.name))
+					})
+
+					return GenericArgumentClauseSyntax(arguments: GenericArgumentListSyntax {
+						for argument in genericArguments {
+							argument
+						}
+					})
+				}()
+
+				var type: TypeSyntaxProtocol = IdentifierTypeSyntax(name: dataStructure.identifier, genericArgumentClause: genericArgumentClause)
 				var (exposedAs, isPublic, isSingleton) = extractMetadata(from: macro)
 
 				for initializer in findInitializers(in: dataStructure) {
@@ -48,7 +62,8 @@ struct Analyser {
 						exposedAs: exposedAs ?? type,
 						arguments: separateParameterList(in: initializer),
 						isPublic: isPublic,
-						isSingleton: isSingleton
+						isSingleton: isSingleton,
+						genericParameters: dataStructure.genericParameterClause
 					)
 
 					components.append(component)
@@ -130,8 +145,16 @@ struct Analyser {
 			for argument in arguments {
 				switch argument.label?.text {
 				case Constants.ExposeAs:
-                    let identifier = argument.expression.as(DeclReferenceExprSyntax.self)?.baseName
-					exposedAs = identifier.map({IdentifierTypeSyntax(name: $0)}) // @mbourke: exposedAs will always be a simple type as inforced by the macro
+					let identifier: TokenSyntax?
+					let genericArgumentClause: GenericArgumentClauseSyntax?
+					if let genericType = argument.expression.as(GenericSpecializationExprSyntax.self) {
+						identifier = genericType.expression.as(DeclReferenceExprSyntax.self)?.baseName
+						genericArgumentClause = genericType.genericArgumentClause
+					} else {
+						identifier = argument.expression.as(DeclReferenceExprSyntax.self)?.baseName
+						genericArgumentClause = nil
+					}
+					exposedAs = identifier.map({IdentifierTypeSyntax(name: $0, genericArgumentClause: genericArgumentClause)})
 				case Constants.Scope:
                     let identifier = argument.expression.cast(MemberAccessExprSyntax.self).declName.baseName
 					isPublic = identifier.text == String(describing: ComponentScope.public)

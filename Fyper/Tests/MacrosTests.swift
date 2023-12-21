@@ -14,7 +14,7 @@ final class MacrosTests: XCTestCase {
         assertMacroExpansion(
             """
 			@Singleton(exposeAs: MyProtocol)
-            final class MyStruct {
+            final class MyGenericClass<S: View> {
                 init(logger: Logger, tracker: Tracker, id: String) {
                     self.logger = logger
                     self.tracker = tracker

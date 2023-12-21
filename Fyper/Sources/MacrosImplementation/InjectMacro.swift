@@ -7,9 +7,7 @@
 
 import SwiftCompilerPlugin
 import SwiftSyntax
-import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
-import SwiftParser
 import SwiftDiagnostics
 import SwiftParserDiagnostics
 import Foundation
@@ -21,8 +19,33 @@ public struct InjectMacro: PeerMacro {
 		providingPeersOf declaration: some DeclSyntaxProtocol,
 		in context: some MacroExpansionContext
 	) throws -> [DeclSyntax] {
-		// TODO: Raise error if applied to anything but initialiser decl
-		// TODO: Raise error if initialiser is async or throwing. we don't support that yet
+		guard let initialiser = declaration.as(InitializerDeclSyntax.self) else {
+			let diagnostic = Diagnostic(
+				node: node._syntaxNode,
+				message: SyntaxError.onlyInitialisers
+			)
+			context.diagnose(diagnostic)
+			return []
+		}
+
+		if initialiser.signature.effectSpecifiers?.asyncSpecifier != nil {
+			let diagnostic = Diagnostic(
+				node: initialiser._syntaxNode,
+				message: SyntaxError.noAsync
+			)
+			context.diagnose(diagnostic)
+			return []
+		}
+
+		if initialiser.signature.effectSpecifiers?.throwsSpecifier != nil {
+			let diagnostic = Diagnostic(
+				node: initialiser._syntaxNode,
+				message: SyntaxError.noThrowing
+			)
+			context.diagnose(diagnostic)
+			return []
+		}
+
 		return []
 	}
 }

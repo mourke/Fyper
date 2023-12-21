@@ -173,6 +173,7 @@ struct Generator {
 			let componentSimpleType = getUnderlyingSimpleType(from: component.type)
 			return FunctionDeclSyntax(
 				name: .identifier("build\(componentSimpleType.name.text)"),
+				genericParameterClause: component.genericParameters,
 				signature: .init(parameterClause: .init(parametersBuilder: {
 					for parameter in component.parameters {
 						FunctionParameterSyntax(
@@ -181,7 +182,7 @@ struct Generator {
 							defaultValue: parameter.value.map({InitializerClauseSyntax(value: ExprSyntax(stringLiteral: $0))})
 						)
 					}
-				}), returnClause: .init(type: builderReturnType(for: component))),
+				}), returnClause: .init(type: component.exposedAs)),
 				bodyBuilder: {
 					FunctionCallExprSyntax(
 						calledExpression: DeclReferenceExprSyntax(baseName: componentSimpleType.name),
@@ -240,18 +241,5 @@ struct Generator {
 		}
 		// @mbourke: We know that all types are backed by simple types so we can force unwrap
 		return _getUnderlyingType(from: type)!
-	}
-
-	private func builderReturnType(for component: Component) -> TypeSyntaxProtocol {
-		if component.isExposedAsProtocol {
-			if let optionalExposed = component.exposedAs.as(OptionalTypeSyntax.self) {
-				let wrappedType = SomeOrAnyTypeSyntax(someOrAnySpecifier: .keyword(.some), constraint: optionalExposed.wrappedType)
-				return OptionalTypeSyntax(wrappedType: TupleTypeSyntax(elements: .init(arrayLiteral: .init(type: wrappedType))))
-			} else {
-				return SomeOrAnyTypeSyntax(someOrAnySpecifier: .keyword(.some), constraint: component.exposedAs)
-			}
-		} else {
-			return component.exposedAs
-		}
 	}
 }

@@ -14,14 +14,8 @@ struct Component {
 	/// The type of the component.
     let type: TypeSyntaxProtocol
 
-	/// The protocol that the Component is exposed as in the generated container. If this is the same as `typename`, no abstraction should occur.
+	/// The type that the Component is exposed as in the generated container. If this is the same as `typename`, no abstraction should occur.
 	let exposedAs: TypeSyntaxProtocol
-
-	/// If the type has been exposed as a protocol. We use this to optionally insert the `some` and `any` keywords before the function return clause.
-	var isExposedAsProtocol: Bool {
-		// @mbourke: we know that if they are different it has to be a protocol as ensured by the macro
-		!exposedAs.isEqual(to: type)
-	}
 
 	/// All of the arguments, in order, that the initializer of the type takes.
 	let arguments: [Argument]
@@ -43,4 +37,7 @@ struct Component {
 	/// to share a single repository instance between two view models so it would be a singleton, whereas you would not want to share a monitor
 	/// between two view models so it would just be a reusable.
 	let isSingleton: Bool
+
+	/// The generic types that the data structure requires.
+	let genericParameters: GenericParameterClauseSyntax?
 }
